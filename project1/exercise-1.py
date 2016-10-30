@@ -1,14 +1,16 @@
 import os
-import string
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-DOCUMENTS_DIRECTORY = os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")
+def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")):
+    """
+    Reads a given document from 'resources' directory by default
+    """
 
-def readDocument(docName):
-    file = open(DOCUMENTS_DIRECTORY + docName, "r")
+    file = open(directory + docName, "r")
     text = file.read().lower()
     no_punctuation = text #TODO remove punctuation
+
     return no_punctuation
 
 #training data
