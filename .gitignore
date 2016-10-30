@@ -87,3 +87,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea/PRI16-17.iml
+.idea/misc.xml
+.idea/workspace.xml
+.idea/misc.xml
