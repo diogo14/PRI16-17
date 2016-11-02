@@ -1,13 +1,20 @@
 import re
-
-import sys
-
+import os
 import math
-
 import operator
 
-foreground_file = sys.argv[1]
-background_file = sys.argv[2]
+from nltk.corpus import stopwords
+
+def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")):
+    """
+    Reads a given document from 'resources' directory by default
+    """
+
+    file = open(directory + docName, "r")
+    text = file.read().lower()
+    no_punctuation = text #TODO remove punctuation
+
+    return no_punctuation
 
 def tokenize(t):
 
@@ -18,33 +25,21 @@ def tokenize(t):
     wrds = text.split()
     return wrds
 
-stoplist = set()
-
-print("Read stopword list")
-
-#change to read the specific document
-with open(r'stoplist_dutch.txt') as stoplist_file:
-
-    for line in stoplist_file:
-        stopword = line.rstrip()
-        stoplist.add(stopword)
-
-
-def get_all_ngrams (text,maxn) :
+def getAllNgrams(text,maxn) :
 
     words = tokenize(text)
     i=0
     terms = dict()
 
     for word in words :
-        if word not in stoplist and len(word) > 1 and '@' not in word:
+        if word not in stopwords.words('english') and len(word) > 1 and '@' not in word:
             if word in terms :
                 terms[word] += 1
             else :
                 terms[word] = 1
         if maxn >= 2 :
             if i< len(words)-1 :
-                if words[i] not in stoplist and words[i+1] not in stoplist:
+                if words[i] not in stopwords.words('english') and words[i+1] not in stopwords.words('english'):
                     bigram = words[i]+ " " +words[i+1]
                     if bigram in terms :
                         terms[bigram] += 1
@@ -53,7 +48,7 @@ def get_all_ngrams (text,maxn) :
 
                 if maxn >= 3 :
                     if i < len(words)-2 :
-                        if not words[i] in stoplist and not words[i+2] in stoplist:
+                        if not words[i] in stopwords.words('english') and not words[i+2] in stopwords.words('english'):
                             # middle word can be a stopword
                             trigram = words[i]+ " " +words[i+1]+ " " +words[i+2]
                             if trigram in terms :
@@ -63,16 +58,15 @@ def get_all_ngrams (text,maxn) :
         i += 1
     return terms
 
-
 def read_text_in_dict(text):
 
-    freq_dict = get_all_ngrams(text,3)
+    freq_dict = getAllNgrams(text,3)
     total_term_count = 0
 
     for key in freq_dict:
         total_term_count += freq_dict[key]
-    return freq_dict, total_term_count
 
+    return freq_dict, total_term_count
 
 def print_top_n_terms(score_dict,n):
 
@@ -85,24 +79,22 @@ def print_top_n_terms(score_dict,n):
         if i==n:
             break
 
-print("Read foreground file",foreground_file)
 
-with open(foreground_file,'r') as fg:
-    fgtext=fg.read()
-    fg_dict, fg_term_count = read_text_in_dict(fgtext)
+##################################################################
+## Main starts here
+##################################################################
 
-print("Read background file",background_file)
+#building structure (dict) to hold each term (n-gram) ocurrance number
+#for both foreground and background corpus
+fg_dict, fg_term_count = read_text_in_dict(readDocument("doc_ex4"))
+bg_dict, bg_term_count = read_text_in_dict("backgound text") #TODO background collection
 
-with open(background_file,'r') as bg:
-    bgtext=bg.read()
-    bg_dict, bg_term_count = read_text_in_dict(bgtext)
-
-print("Calculate kldiv per term in foregound corpus")
-
-kldiv_per_term = dict()
+#calculate kldiv per term (n-gram) from foreground document
+kldiv_per_term = {}
 
 for term in fg_dict:
     fg_freq = fg_dict[term]
+
     # kldivI is kldiv for informativeness: relative to bg corpus freqs
     bg_freq = 1
 
@@ -119,8 +111,7 @@ for term in fg_dict:
     relfreq_unigrams = 1.0
 
     for unigram in unigrams:
-        if unigram in fg_dict:
-            # stopwords are not in the dict
+        if unigram in fg_dict:  # testing because middle n-gram word can be a stop word, so it has no occurance in fg_dict
             u_freq = fg_dict[unigram]
             u_relfreq = float(u_freq)/float(fg_term_count)
             relfreq_unigrams *= u_relfreq
