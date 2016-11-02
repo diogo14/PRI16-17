@@ -1,4 +1,5 @@
 import numpy
+import os
 
 def precision(list_r, list_a):
     # intersection of R with A
@@ -48,3 +49,24 @@ def avg_precision(list1, list2, k=5):
 
 def mean_avg_precision(list1, list2, k=5):
     return numpy.mean([avg_precision(l1, l2, k) for l1, l2 in zip(list1, list2)])
+
+
+
+# function document_words
+def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+        #split words and return a dictionary with [doc_name: words]
+        # cycle for for all documents
+        file = open(directory + docName, "r")
+        text = file.read().lower()
+        for word in text.split():
+            print {docName, word}
+
+
+# function return distinct keywords
+def (doc_name, directory=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
+        #retrieve content of each .key file for each document
+        for
+
+    return {doc_name, (# list of keywords)}
+
+#def document_keywords(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
