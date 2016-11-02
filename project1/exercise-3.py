@@ -17,7 +17,7 @@ def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.p
 
     return no_punctuation
 
-def buildInvertedIndexDict(doc_list):
+def buildInvertedIndexDict(documents_list):
     """
     Creates a dictionary that for each term(n-gram) contains a dictionary of documents where that term occurrs and the
     number of occurrences. e.g., {'word' : {'document1' : 4}
@@ -29,56 +29,67 @@ def buildInvertedIndexDict(doc_list):
     total_term_number = 0
     inverted_index_dict = {}
 
-    for term_list in doc_list:
-        total_term_number += len(term_list)
+    for doc_index, doc_term_list in enumerate(documents_list):
+        total_term_number += len(doc_term_list)
 
-        for term in term_list:
+        for term in doc_term_list:
             if term in inverted_index_dict:
-                if doc in inverted_index_dict[term]:
-                    inverted_index_dict[term][doc] = inverted_index_dict[term][doc] + 1
+                if doc_index in inverted_index_dict[term]:
+                    inverted_index_dict[term][doc_index] = inverted_index_dict[term][doc_index] + 1
                 else:
-                    inverted_index_dict[term][doc] = 1
+                    inverted_index_dict[term][doc_index] = 1
 
             else:
-                invertedIndexDict[term] = {doc : 1}
-
-    print("# Terms: " + str(total_term_number))
+                inverted_index_dict[term] = {doc_index : 1}
 
     return inverted_index_dict
 
-def calcTermDF(inverted_index_dict, term, document):
+def calcCandidateIDF(inverted_index_dict, candidate, total_doc_number):
     """
-    Returns the f(t, D) - frequcny for term t in document D
-    """
-    if term in inverted_index_dict:
-        return inverted_index_dict[term][document]
-    else:
-        return 0
-
-def calcTermIDF(inverted_index_dict, term, total_doc_number):
-    """
-    IDF of a given term
+    IDF of a given candidate
 
     IDF = log((N - n(t) + 0.5) / (n(t) + 0.5
     N - total number of documents in a background collection
     n(t) - number of documents, from this background, containing the term t
     """
 
-    df = calcTermDF(inverted_index_dict, term)
-    return math.log((total_doc_number - df + 0.5) / (df + 0.5))
+    n_t = len(inverted_index_dict[candidate])
+    return math.log((total_doc_number - n_t + 0.5) / (n_t + 0.5))
 
-def calcTermScore(inverted_index_dict, term, document, document_length, average_document_length, total_document_number):
+def calcCandidateScore(inverted_index_dict, n_grammed_document, candidate, document_length, average_document_length, number_background_documents):
     """
-    Gets  score to a given candidate (term) within a given document according to the BM25 term weighting heuristic
+    Gets  score to a given candidate  within a given document according to the BM25 term weighting heuristic
     """
 
     k1 = 1.2
     b = 0.75
 
-    idf = calcTermIDF(inverted_index_dict, term, total_document_number)
-    df = calcTermDF(inverted_index_dict, term, document)
+    idf = calcCandidateIDF(inverted_index_dict, candidate, number_background_documents)
 
-    return idf * (df * (k1 + 1)) / (df + k1 * (1 - b + b * document_length / average_document_length))
+    #f(t, D) - frequency for candidate t in document D
+    tf = n_grammed_document.count(candidate)
+
+    return idf * ((tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (document_length / average_document_length))))
+
+def performCandidateScoring(inverted_index_dict, candidates, n_grammed_document, average_document_length, number_background_documents):
+    scores = {}
+
+    document_length = len(n_grammed_document)
+
+    for candidate in set(candidates):
+
+        if candidate not in inverted_index_dict:
+            continue
+
+        candidate_doc_score = calcCandidateScore(inverted_index_dict, n_grammed_document, candidate, document_length,
+                                                 average_document_length, number_background_documents)
+
+        #print("score('" + candidate + "') = " + str(candidate_doc_score))
+
+        if candidate not in scores:
+            scores[candidate] = candidate_doc_score
+
+    return scores
 
 def getWordGrams(words, min=1, max=4):
     """
@@ -105,8 +116,8 @@ def filterNGrams(list, regex_pattern):
         observed_pattern = ""
         for pair in tagged:
             observed_pattern += " " + pair[1]
-        print(tagged)
-        print(observed_pattern)
+        #print(tagged)
+        #print(observed_pattern)
 
         if(re.match(regex_pattern, observed_pattern)):
             filtered.append(candidate)
@@ -116,21 +127,74 @@ def filterNGrams(list, regex_pattern):
 def removeStopWords(list_terms):
     return [token for token in list_terms if token not in stopwords.words('english')]
 
+def prepareDocuments(documents):
+    """
+    Tokenizes, removes stopwords and punctuation
 
-#Main starts here
+    :param documents: list of strings (documents)
+    :return: list of list of strings (each documents terms)
+    """
+    prepared = [nltk.word_tokenize(d) for d in documents]
+    prepared = [removeStopWords(d) for d in prepared]
+    # TODO remove punctuation
 
-#training data
-train = fetch_20newsgroups(subset='train')
+    return prepared
 
-documents = [nltk.word_tokenize(d) for d in ["um dois tres", "quatro cinco seis"]]  #change to train.data as background collection
-filtered_documents = [removeStopWords(d) for d in documents]
-#TODO remove punctuation
-n_grammed_documents = [getWordGrams(words) for words in filtered_documents]
-print(n_grammed_documents)
+def retrieveAverageDocLength(documents):
+    total_documents_terms = 0
 
+    for doc_term_list in documents:
+        total_documents_terms += len(doc_term_list)
+
+    return total_documents_terms / len(documents)
+
+
+
+##################################################################
+## Main starts here
+##################################################################
+
+#background documents
+background_documents = fetch_20newsgroups(subset='train')
+
+
+#tokenizing, removing stopwords and punctuation from background collection
+documents = prepareDocuments(["doc1 words here", "doc2 words here example"])
+
+#getting background  avgdl and N
+average_document_length = retrieveAverageDocLength(documents)
+number_background_documents = len(documents)
+
+#getting background documents n-grams
+n_grammed_background_documents = [getWordGrams(words) for words in documents]
+
+#filtering background candidates
 filtering_regex = r""   #TODO choose good pattern to match
-filtered_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_documents]
-print(filtered_n_grams)
+filtered_background_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_background_documents]
+
+#building structure that holds background candidate occurances over documents
+inverted_index_dict = buildInvertedIndexDict(filtered_background_n_grams)
 
 
-#to be continued...
+
+#document to analyze
+document = readDocument("doc_ex3")
+query_document_terms = prepareDocuments([document])
+
+#n-grammed document
+n_grammed_document = [getWordGrams(words) for words in query_document_terms]
+
+#filtering
+filtered_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_document]
+
+#score for each candidate
+scores = performCandidateScoring(inverted_index_dict, filtered_n_grams[0], n_grammed_document[0], average_document_length, number_background_documents)
+
+#reverse ordering of candidates scores
+top_candidates = sorted(scores.items(), key = lambda x: x[1], reverse = True)
+
+#top 5 candidatess
+for candidate in top_candidates[:5]:
+    print("" + str(candidate[0]) + " - " + str(candidate[1]))
+
+
