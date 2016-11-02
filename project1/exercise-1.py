@@ -17,16 +17,18 @@ def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.p
 train = fetch_20newsgroups(subset='train')
 
 #document to apply automatic keyphrase extraction on
-testDoc = readDocument("doc1")
+testDoc = readDocument("doc_ex1")
 
 #matrix containing document in each row and term in each column vectorizer[doc][term] = tf-idf-value
 vectorizer = TfidfVectorizer(ngram_range=(1,2), stop_words="english", use_idf=True )
-train_vec = vectorizer.fit_transform(train.data[:2])    #TODO remove :2 to include all data
+train_vec = vectorizer.fit_transform(["ola documento um documento dois", "ola documento documentodois "])    #TODO remove :2 to include all data
 test_vec = vectorizer.transform([testDoc])
 
 #collecting candidate rankings
 feature_names = vectorizer.get_feature_names()
 scored_candidates = {}
+
+print(scored_candidates)
 for idx, candidate in enumerate(feature_names):
     scored_candidates[candidate] = test_vec.toarray()[0][idx] #adding all candidates with respective tf-idf value to the dictionary
 
