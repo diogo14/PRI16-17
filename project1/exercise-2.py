@@ -1,3 +1,4 @@
+import nltk
 import numpy
 import os
 from glob import glob
@@ -57,42 +58,83 @@ def mean_avg_precision(list1, list2, k=5):
 #-------------------
 
 
-
+"""
 # function document_words
-def document_words(fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+def document_words(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "documents\\")):
 #def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
         #split words and return a dictionary with document and list of words.
         # cycle for for all documents
 
-    texts, words = {}, set()
-    for txtfile in glob(fileglob):
-        with open(txtfile, 'r') as f:
-            txt = f.read().split()
-            words |= set(txt)
-            texts[txtfile.split('\\')[-1]] = txt
-    return texts, words
+    for docname in os.listdir(fileglob):
+        print docname
+"""
 
-texts, words = document_words()
+def document_words(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "documents\\")):
+#def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+        #split words and return a dictionary with document and list of words.
+        # cycle for for all documents
+    sets = []
+    idx = 0
+    for docname in os.listdir(fileglob):
+        dict()[idx] = docname
+        f = open(fileglob + docname)
+        read = f.read()
+        read = read.decode('latin-1')
+        words = nltk.word_tokenize(read)
+        sets += [read]
+        idx += 1
+    print(sets)
 
-#{'document_x': ['word1', 'word2' ...]}
-pp(texts)
-# same but sorted without duplicates
-pp(sorted(words))
+
+def distinct_keywords(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "indexers\\")):
+#def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+        #split words and return a dictionary with document and list of words.
+        # cycle for for all documents
+    sets = []
+    idx = 0
+    for dirpath, dirs, files in os.walk(fileglob):
+        for docname in files:
+            f = open(fileglob + docname)
+            read = f.read()
+            read = read.decode('latin-1')
+            keys = read.split("\n", -1)[:-1]
+            #docname = docname[:-4] + '.txt' could be needed for normalize the extensions of files
+            dict()[docname] = keys
+
+"""
+for dirpath, dirs, files in os.walk(fileglob):
+        for filname in files:
+            filename = os.listdir(fileglob[0])
+            print filenam
+
+
+
 
 path = '/projec1/dataset/indexers/'
 # function return distinct keywords
-def distinct_keywords(documents, path fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
+
+
+def distinct_keywords(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "indexers\\")):
         #retrieve content of each .key file for each document
-
-    for dirpath, dirs, files in os.walk(path):
-        for filename in files:
-            fname = os.path.join(dirpath, filename)
-            if fname.endswith('.key'):
-                with open(fname) as myfile:
-                    myfile.decode('latin-1')
-                    print(myfile.read())
+    sets = []
+    doc_idex = 0
+    for docname in os.listdir(fileglob)
 
 
+"""
+
+"""
+def distinct_keywords(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "indexers\\")):
+
+    #i = set (list_this).union(list_other)
+    for dirpath, dirs, files in os.walk(fileglob):
+        for filname in files:
+            filename = os.listdir(fileglob[0])
+            print filename
+
+
+"""
+"""
 
     texts, words = {}, set()
     for txtfile in glob(fileglob):
@@ -107,3 +149,6 @@ pp(sorted(words))
 #missing check with all documents, maybe update the initial list of keywords.
 
 #def document_keywords(document, words):
+"""
+document_words()
+distinct_keywords()
