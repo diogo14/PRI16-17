@@ -55,11 +55,15 @@ def mean_avg_precision(list1, list2, k=5):
 #-------------------
 # NOT TESTED YET
 #-------------------
+
+
+
 # function document_words
 def document_words(fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
 #def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
         #split words and return a dictionary with document and list of words.
         # cycle for for all documents
+
     texts, words = {}, set()
     for txtfile in glob(fileglob):
         with open(txtfile, 'r') as f:
@@ -75,10 +79,21 @@ pp(texts)
 # same but sorted without duplicates
 pp(sorted(words))
 
-
+path = '/projec1/dataset/indexers/'
 # function return distinct keywords
-def distinct_keywords(fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
+def distinct_keywords(documents, path fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
         #retrieve content of each .key file for each document
+
+    for dirpath, dirs, files in os.walk(path):
+        for filename in files:
+            fname = os.path.join(dirpath, filename)
+            if fname.endswith('.key'):
+                with open(fname) as myfile:
+                    myfile.decode('latin-1')
+                    print(myfile.read())
+
+
+
     texts, words = {}, set()
     for txtfile in glob(fileglob):
         with open(txtfile, 'r') as f:
