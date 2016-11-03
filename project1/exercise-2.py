@@ -1,5 +1,7 @@
 import numpy
 import os
+from glob import glob
+from pprint import pprint as pp
 
 def precision(list_r, list_a):
     # intersection of R with A
@@ -50,23 +52,58 @@ def avg_precision(list1, list2, k=5):
 def mean_avg_precision(list1, list2, k=5):
     return numpy.mean([avg_precision(l1, l2, k) for l1, l2 in zip(list1, list2)])
 
+#-------------------
+# NOT TESTED YET
+#-------------------
+
 
 
 # function document_words
-def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
-        #split words and return a dictionary with [doc_name: words]
+def document_words(fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+#def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
+        #split words and return a dictionary with document and list of words.
         # cycle for for all documents
-        file = open(directory + docName, "r")
-        text = file.read().lower()
-        for word in text.split():
-            print {docName, word}
 
+    texts, words = {}, set()
+    for txtfile in glob(fileglob):
+        with open(txtfile, 'r') as f:
+            txt = f.read().split()
+            words |= set(txt)
+            texts[txtfile.split('\\')[-1]] = txt
+    return texts, words
 
+texts, words = document_words()
+
+#{'document_x': ['word1', 'word2' ...]}
+pp(texts)
+# same but sorted without duplicates
+pp(sorted(words))
+
+path = '/projec1/dataset/indexers/'
 # function return distinct keywords
-def (doc_name, directory=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
+def distinct_keywords(documents, path fileglob=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
         #retrieve content of each .key file for each document
-        for
 
-    return {doc_name, (# list of keywords)}
+    for dirpath, dirs, files in os.walk(path):
+        for filename in files:
+            fname = os.path.join(dirpath, filename)
+            if fname.endswith('.key'):
+                with open(fname) as myfile:
+                    myfile.decode('latin-1')
+                    print(myfile.read())
 
-#def document_keywords(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "indexers\\")):
+
+
+    texts, words = {}, set()
+    for txtfile in glob(fileglob):
+        with open(txtfile, 'r') as f:
+            txt = f.read().split()
+            words |= set(txt)
+            texts[txtfile.split('\\')[-1]] = txt
+    return texts, words
+
+#keywords in each indexer file
+pp(sorted(words))
+#missing check with all documents, maybe update the initial list of keywords.
+
+#def document_keywords(document, words):

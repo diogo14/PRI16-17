@@ -6,16 +6,15 @@ from nltk.util import ngrams
 from nltk.corpus import stopwords
 from sklearn.datasets import fetch_20newsgroups
 
-def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")):
+def readDocument(docPathName=os.path.join(os.path.dirname(__file__), "resources", "doc_ex1")):
     """
     Reads a given document from 'resources' directory by default
     """
-
-    file = open(directory + docName, "r")
+    file = open(docPathName, "r")
     text = file.read().lower()
-    no_punctuation = text #TODO remove punctuation
+    #no_punctuation = text #TODO remove punctuation
 
-    return no_punctuation
+    return text
 
 def buildInvertedIndexDict(documents_list):
     """
@@ -106,34 +105,40 @@ def prepareDocuments(documents):
 ## Main starts here
 ##################################################################
 
-#background documents
-background_documents = fetch_20newsgroups(subset='train')
+#get foreground document
+foreground_document = readDocument()
+
+#get training document set
+training_dataset = fetch_20newsgroups(subset='train').data
+
+#create background document set
+background_documents = training_dataset + [foreground_document]
 
 #tokenizing, removing stopwords and punctuation from background collection
-documents = prepareDocuments(["doc1 words here", "doc2 words here example example"])
+#documents = prepareDocuments(["doc1 words here", "doc2 words here example example"])
 
 #getting background documents n-grams
-bi_grammed_background_documents = [getWordGrams(words) for words in documents]
+#bi_grammed_background_documents = [getWordGrams(words) for words in documents]
 
 #building structure that holds background candidate occurances over documents
-inverted_index_dict = buildInvertedIndexDict(bi_grammed_background_documents)
+#inverted_index_dict = buildInvertedIndexDict(bi_grammed_background_documents)
 
 
 #document to analyze
-document = readDocument("doc_ex1")
-query_document_terms = prepareDocuments([document])
+#document = readDocument("doc_ex1")
+#query_document_terms = prepareDocuments([document])
 
 #n-grammed document
-bi_grammed_document = [getWordGrams(words) for words in query_document_terms]
+#bi_grammed_document = [getWordGrams(words) for words in query_document_terms]
 
 #score for each candidate
-scores = performCandidateScoring(inverted_index_dict, bi_grammed_document[0], len(background_documents))
+#scores = performCandidateScoring(inverted_index_dict, bi_grammed_document[0], len(background_documents))
 
 #reverse ordering of candidates scores
-top_candidates = sorted(scores.items(), key = lambda x: x[1], reverse = True)
+#top_candidates = sorted(scores.items(), key = lambda x: x[1], reverse = True)
 
 #top 5 candidates
-for candidate in top_candidates[:5]:
-    print("" + str(candidate[0]) + " - " + str(candidate[1]))
+#for candidate in top_candidates[:5]:
+ #   print("" + str(candidate[0]) + " - " + str(candidate[1]))
 
 
