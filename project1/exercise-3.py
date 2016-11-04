@@ -199,6 +199,7 @@ n_grammed_background_documents = [getWordGrams(words) for words in documents]
 filtered_background_n_grams = removeStopWords(n_grammed_background_documents)
 
 #filtering background candidates
+filtering_regex = r"(JJ\s)*(NN(S|PS|P)?\s?)+\s?(IN)?"
 filtered_background_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_background_documents]
 
 #building structure that holds background candidate occurances over documents
