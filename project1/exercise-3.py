@@ -2,22 +2,15 @@ import os
 import math
 import re
 import nltk
-from nltk.util import ngrams
+
 from nltk.corpus import stopwords
 from sklearn.datasets import fetch_20newsgroups
 
-def readDocument(docPathName=os.path.join(os.path.dirname(__file__), "resources", "doc_ex3")):
-    """
-    Reads a given document from 'resources' directory by default
-    """
 
-    print(docPathName)
-
-    file = open(docPathName, "r")
-    text = file.read().lower()
-    #no_punctuation = text #TODO remove punctuation
-
-    return text
+from util import readDocument
+from util import prepareDocuments
+from util import getWordGrams
+from util import printTopNTerms
 
 def buildInvertedIndexDict(documents_list):
     """
@@ -93,19 +86,6 @@ def performCandidateScoring(inverted_index_dict, candidates, n_grammed_document,
 
     return scores
 
-def getWordGrams(words, min=1, max=4):
-    """
-    Getting n-grams in a specified range
-    """
-
-    s = []
-
-    for n in range(min, max):
-        for ngram in ngrams(words, n):
-            s.append(' '.join(str(i) for i in ngram))
-
-    return s
-
 def filterNGrams(list, regex_pattern):
     """
     Return a list of n-grams after filtering with a given REGEX
@@ -155,18 +135,6 @@ def removeStopWords(doc_list):
 
     return filtered_docs
 
-def prepareDocuments(documents):
-    """
-    Tokenizes, removes stopwords and punctuation
-
-    :param documents: list of strings (documents)
-    :return: list of list of strings (each documents terms)
-    """
-    prepared = [nltk.word_tokenize(d) for d in documents]
-    # TODO remove punctuation
-
-    return prepared
-
 def retrieveAverageDocLength(documents):
     total_documents_terms = 0
 
@@ -176,7 +144,6 @@ def retrieveAverageDocLength(documents):
     return total_documents_terms / len(documents)
 
 
-
 ##################################################################
 ## Main starts here
 ##################################################################
@@ -184,9 +151,8 @@ def retrieveAverageDocLength(documents):
 #background documents
 background_documents = fetch_20newsgroups(subset='train')
 
-
 #tokenizing, removing stopwords and punctuation from background collection
-documents = prepareDocuments(["doc1 her damn", "doc2 me donp example"])
+documents = prepareDocuments(background_documents.data)
 
 #getting background  avgdl and N
 average_document_length = retrieveAverageDocLength(documents)
@@ -199,7 +165,7 @@ n_grammed_background_documents = [getWordGrams(words) for words in documents]
 filtered_background_n_grams = removeStopWords(n_grammed_background_documents)
 
 #filtering background candidates
-filtering_regex = r"(JJ\s)*(NN(S|PS|P)?\s?)+\s?(IN)?"
+filtering_regex = r"((JJ\s)*(NN(S|(PS)|P)?\s)+IN\s)?((JJ\s)*(NN(S|(PS)|P)?\s?)+)+"
 filtered_background_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_background_documents]
 
 #building structure that holds background candidate occurances over documents
@@ -207,7 +173,7 @@ inverted_index_dict = buildInvertedIndexDict(filtered_background_n_grams)
 
 
 #document to analyze
-document = readDocument()
+document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex3"))
 query_document_terms = prepareDocuments([document])
 
 #n-grammed document
@@ -222,11 +188,5 @@ filtered_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_gramme
 #score for each candidate
 scores = performCandidateScoring(inverted_index_dict, filtered_n_grams[0], n_grammed_document[0], average_document_length, number_background_documents)
 
-#reverse ordering of candidates scores
-top_candidates = sorted(scores.items(), key = lambda x: x[1], reverse = True)
-
-#top 5 candidatess
-for candidate in top_candidates[:5]:
-    print("" + str(candidate[0]) + " - " + str(candidate[1]))
-
+printTopNTerms(scores, 5)
 
