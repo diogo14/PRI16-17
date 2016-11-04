@@ -1,8 +1,65 @@
 import nltk
 import numpy
 import os
-from glob import glob
-from pprint import pprint as pp
+from util import readDocument
+from util import calculate_top_candidates
+
+# returns a list of the keyphrases listed in the file specified
+def getKeyphrasesFromFile(filePathName):
+    keyPhrases = readDocument(filePathName).splitlines()
+    return keyPhrases
+
+# returns a list of all the keyphrases relevant to a given document
+def getDocumentRelevantKeyphrases(docName):
+    rootPath = os.path.join(os.path.dirname(__file__), "dataset", "indexers")
+    k = []
+    for i in range(1, 7):
+        k.append(getKeyphrasesFromFile(os.path.join(rootPath, "iic" + str(i), docName[:-3] + "key")))
+    return list(set().union(k[0], k[1], k[2], k[3], k[4], k[5]))
+
+# calculates the various evaluation values for a given document
+def calculateDocumentEvaluation(foreground_document, background_documents):
+    retrieved =  [x[0] for x in calculate_top_candidates(foreground_document["text"], background_documents)]
+    relevant = getDocumentRelevantKeyphrases(foreground_document["name"])
+    values = {}
+    values["precision"] = precision(relevant, retrieved)
+    values["recall"] = recall(relevant, retrieved)
+    values["f1"] = f1(values["precision"], values["recall"])
+    values["ap"] = avg_precision(relevant, retrieved)
+    return values
+
+# returns a list of all the file names of a given directory
+def getDocumentNames(path=os.path.join(os.path.dirname(__file__), "dataset", "documents")):
+    fileNames = os.listdir(path)
+    fileNames.sort()
+    return fileNames
+
+# calculates and prints the evaluation results for all the docs in the collection
+def print_evaluations(documentNames):
+    rootPath = os.path.join(os.path.dirname(__file__), "dataset", "documents")
+    documents = {}
+    background_documents = []
+    for docName in documentNames:
+        text = readDocument(os.path.join(rootPath, docName))
+        utf = unicode(text, "ISO-8859-1")
+        documents[docName] = utf
+        background_documents.append(utf)
+
+    foreground_document = {}
+    map = []
+    for docName in documents:
+        foreground_document["name"] = docName
+        foreground_document["text"] = documents[docName]
+        values = calculateDocumentEvaluation(foreground_document, background_documents)
+        print "====== " + docName + " ======"
+        print "Precision: " + str(values["precision"])
+        print "Recall: " + str(values["recall"])
+        print "F1: " + str(values["f1"]) + "\n"
+        map.append(values["ap"])
+
+    print "==================="
+    print "Mean Av. Precision: " + str(mean_avg_precision(map))
+
 
 def precision(list_r, list_a):
     # intersection of R with A
@@ -12,15 +69,20 @@ def precision(list_r, list_a):
         return 0
     else:
         # relevant docs(R intersection A) within all docs(A)
-        return len(i) / len2
+        return float(len(i)) / len2
 
 
 def recall(list_r, list_a):
     i = set(list_r).intersection(list_a)
     # the same but divided by R
-    return len(i) / len(list_r)
+    return float(len(i)) / len(list_r)
 
-
+def f1(prec, rec):
+    if prec + rec == 0:
+        return 0
+    else:
+        return float(2*(prec * rec))/(rec + prec)
+"""
 def f1_score(list_r, list_a):
     # use above functions
     prec = precision(list_r, list_a)
@@ -29,6 +91,7 @@ def f1_score(list_r, list_a):
         return 0
     else:
         return 2*(prec * rec)/(rec + prec)
+"""
 
 
 def avg_precision(list1, list2, k=5):
@@ -47,15 +110,26 @@ def avg_precision(list1, list2, k=5):
     if not list1:
         return 0.0
 
-    return score / min(len(list1), k)
+    return float(score) / min(len(list1), k)
+
+def mean_avg_precision(ap_list):
+    total = 0
+    for i in ap_list:
+        total = total + i
+    return float(total) / float(len(ap_list))
+
+#def mean_avg_precision(list1, list2, k=5):
+#    return numpy.mean([avg_precision(l1, l2, k) for l1, l2 in zip(list1, list2)])
+
+##################################################################
+## Main starts here
+##################################################################
+
+#calculateDocumentEvaluation({"text":"text simples"}, ["text simples", "example"])
+print_evaluations(getDocumentNames())
 
 
-def mean_avg_precision(list1, list2, k=5):
-    return numpy.mean([avg_precision(l1, l2, k) for l1, l2 in zip(list1, list2)])
 
-#-------------------
-# NOT TESTED YET
-#-------------------
 
 
 """
@@ -68,7 +142,7 @@ def document_words(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "
     for docname in os.listdir(fileglob):
         print docname
 """
-
+"""
 def document_words(fileglob=os.path.join(os.path.dirname(__file__), "dataset", "documents\\")):
 #def document_words(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "documents\\")):
         #split words and return a dictionary with document and list of words.
@@ -100,6 +174,10 @@ def distinct_keywords(fileglob=os.path.join(os.path.dirname(__file__), "dataset"
             keys = read.split("\n", -1)[:-1]
             #docname = docname[:-4] + '.txt' could be needed for normalize the extensions of files
             dict()[docname] = keys
+
+"""
+
+
 
 """
 for dirpath, dirs, files in os.walk(fileglob):
@@ -150,5 +228,3 @@ pp(sorted(words))
 
 #def document_keywords(document, words):
 """
-document_words()
-distinct_keywords()
