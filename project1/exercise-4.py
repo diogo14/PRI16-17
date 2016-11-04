@@ -1,49 +1,10 @@
-import os
 import math
-import operator
-import nltk
-from nltk.util import ngrams
-from nltk.corpus import stopwords
+import os
 
-def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")):
-    """
-    Reads a given document from 'resources' directory by default
-    """
-
-    file = open(directory + docName, "r")
-    text = file.read().lower()
-    no_punctuation = text #TODO remove punctuation
-
-    return no_punctuation
-
-def prepareDocuments(documents):
-    """
-    Tokenizes, removes stopwords and punctuation
-
-    :param documents: list of strings (documents)
-    :return: list of list of strings (each documents terms)
-    """
-    prepared = [nltk.word_tokenize(d) for d in documents]
-    prepared = [removeStopWords(d) for d in prepared]
-    # TODO remove punctuation
-
-    return prepared
-
-def removeStopWords(list_terms):
-    return [token for token in list_terms if token not in stopwords.words('english')]
-
-def getWordGrams(words, min=1, max=3):
-    """
-    Getting n-grams in a specified range
-    """
-
-    s = []
-
-    for n in range(min, max):
-        for ngram in ngrams(words, n):
-            s.append(' '.join(str(i) for i in ngram))
-
-    return s
+from util import readDocument
+from util import prepareDocuments
+from util import getWordGrams
+from util import printTopNTerms
 
 def buildTermCountDict(doc_list):
 
@@ -108,7 +69,7 @@ def calcLM1(term, freq_dict, total_unigram_count):
 
     return relfreq_unigrams
 
-def calcLM2(term, freq_dict, total_unigram_count):  #TODO
+def calcLM2(term, freq_dict, total_unigram_count):
 
     term_freq = 1   # add-1 smoothing
 
@@ -117,28 +78,16 @@ def calcLM2(term, freq_dict, total_unigram_count):  #TODO
 
     return float(term_freq) / float(total_unigram_count)
 
-def printTopNTerms(scores, n):
-
-    # reverse ordering of candidates scores
-    top_candidates = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-
-    # top 5 candidates
-    for candidate in top_candidates[:n]:
-        print("" + str(candidate[0]) + " - " + str(candidate[1]))
-
-
 ##################################################################
 ## Main starts here
 ##################################################################
 
-#building structure (dict) to hold each term (n-gram) ocurrance number
-#for both foreground and background corpus
+fg = prepareDocuments([readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex4"))])
+bg = prepareDocuments(["palavras lol epa palavras lol epa assim lol epa lol lol epa assim doc1"])   #TODO read background from collection
 
-fg = prepareDocuments([readDocument("doc_ex4")])
-bg = prepareDocuments(["palavras lol epa palavras lol epa assim lol epa lol lol epa assim doc1"])
-
+#dictionaries holding each term (n-gram) ocurrance number
 fg_dict, fg_unigram_count = buildTermCountDict(fg)
-bg_dict, bg_unigram_count = buildTermCountDict(bg) #TODO background collection
+bg_dict, bg_unigram_count = buildTermCountDict(bg)
 
 #KLDiv score per candidate
 scores = calcCandidateKLDivScore(fg_dict, bg_dict, fg_unigram_count, bg_unigram_count)

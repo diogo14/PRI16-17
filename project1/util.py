@@ -1,6 +1,12 @@
 import operator
+import nltk
+import string
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+from nltk.util import ngrams
+from nltk.corpus import stopwords
+
 
 def readDocument(docPathName):
     file = open(docPathName, "r")
@@ -49,3 +55,49 @@ def calculate_top_candidates(foreground_document, background_documents):
     scores = calculate_scores(fore_dic, tf_vec, back_dic, idf_vec)
 
     return get_top_candidates(scores)
+
+
+def prepareDocuments(documents):
+    """
+    Tokenizes, removes punctuation
+
+    :param documents: list of strings (documents)
+    :return: list of list of strings (each documents terms)
+    """
+
+    clean_docs = []
+
+    for document in documents:
+        translate_table = dict((ord(char), None) for char in string.punctuation)
+        clean_docs.append(document.translate(translate_table))
+
+    tokenized_docs = [nltk.word_tokenize(d) for d in clean_docs]
+
+    return tokenized_docs
+
+def removeStopWords(list_terms):
+    return [token for token in list_terms if token not in stopwords.words('english')]
+
+def getWordGrams(words, min=1, max=3):
+    """
+    Getting n-grams in a specified range
+    """
+
+    s = []
+
+    for n in range(min, max):
+        for ngram in ngrams(words, n):
+            s.append(' '.join(str(i) for i in ngram))
+
+    return s
+
+def printTopNTerms(scores, n):
+
+    # reverse ordering of candidates scores
+    top_candidates = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+    # top 5 candidates
+    for candidate in top_candidates[:n]:
+        print("" + str(candidate[0]) + " - " + str(candidate[1]))
+
+
