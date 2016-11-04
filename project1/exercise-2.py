@@ -82,23 +82,16 @@ def f1(prec, rec):
     else:
         return float((2* rec * prec))/float((rec + prec))
 
-def avg_precision(list1, list2, k=5):
-
-    if len(list2) > k:
-        list2 = list2[:k]
-
-    score = 0.0
-    hits = 0.0
-
-    for i, p in enumerate(list2):
-        if p in list1 and p not in list2[:i]:
-            hits += 1.0
-            score += hits / (i + 1.0)
-
-    if not list1:
-        return 0.0
-
-    return float(score) / min(len(list1), k)
+def avg_precision(list_r, list_a):
+    score = 0
+    ri = 0
+    for i in range(0, len(list_a)):
+        if list_a[i] in list_r:
+            ri = 1
+        else:
+            ri = 0
+        score = score + (ri * precision(list_r, list_a[:i+1]))
+    return float(score) / float(len(list_r))
 
 def mean_avg_precision(ap_list):
     total = 0
@@ -109,6 +102,4 @@ def mean_avg_precision(ap_list):
 ##################################################################
 ## Main starts here
 ##################################################################
-#print_evaluations(getDocumentNames())
-
-print recall(["A", "B", "C", "D"], ["A", "E", "F", "B", "Z"])
+print_evaluations(getDocumentNames())
