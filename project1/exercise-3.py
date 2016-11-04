@@ -6,16 +6,18 @@ from nltk.util import ngrams
 from nltk.corpus import stopwords
 from sklearn.datasets import fetch_20newsgroups
 
-def readDocument(docName, directory=os.path.join(os.path.dirname(__file__), os.pardir, "resources\\")):
+def readDocument(docPathName=os.path.join(os.path.dirname(__file__), "resources", "doc_ex3")):
     """
     Reads a given document from 'resources' directory by default
     """
 
-    file = open(directory + docName, "r")
-    text = file.read().lower()
-    no_punctuation = text #TODO remove punctuation
+    print(docPathName)
 
-    return no_punctuation
+    file = open(docPathName, "r")
+    text = file.read().lower()
+    #no_punctuation = text #TODO remove punctuation
+
+    return text
 
 def buildInvertedIndexDict(documents_list):
     """
@@ -124,8 +126,34 @@ def filterNGrams(list, regex_pattern):
 
     return filtered
 
-def removeStopWords(list_terms):
-    return [token for token in list_terms if token not in stopwords.words('english')]
+def removeStopWords(doc_list):
+    """
+    Removes terms containing stopwords except trigram containing stopword in the middle "word1 stopword word2"
+    """
+    filtered_docs = []
+    remove = False
+
+    for doc_terms in doc_list:
+        filtered_doc = []
+        for term in doc_terms:
+            words = term.split(' ')
+            for idx,word in enumerate(words):
+                if word in stopwords.words('english'):
+                    if len(words) == 3 and idx == 1:        #if is trigram and stopword in the middle: don't remove
+                        continue
+                    else:
+                        remove = True
+                        break
+
+            if remove == False:
+                filtered_doc.append(term)
+
+            remove = False
+
+        filtered_docs.append(filtered_doc)
+
+
+    return filtered_docs
 
 def prepareDocuments(documents):
     """
@@ -135,7 +163,6 @@ def prepareDocuments(documents):
     :return: list of list of strings (each documents terms)
     """
     prepared = [nltk.word_tokenize(d) for d in documents]
-    prepared = [removeStopWords(d) for d in prepared]
     # TODO remove punctuation
 
     return prepared
@@ -159,7 +186,7 @@ background_documents = fetch_20newsgroups(subset='train')
 
 
 #tokenizing, removing stopwords and punctuation from background collection
-documents = prepareDocuments(["doc1 words here", "doc2 words here example"])
+documents = prepareDocuments(["doc1 her damn", "doc2 me donp example"])
 
 #getting background  avgdl and N
 average_document_length = retrieveAverageDocLength(documents)
@@ -168,21 +195,25 @@ number_background_documents = len(documents)
 #getting background documents n-grams
 n_grammed_background_documents = [getWordGrams(words) for words in documents]
 
+#remove stopwords
+filtered_background_n_grams = removeStopWords(n_grammed_background_documents)
+
 #filtering background candidates
-filtering_regex = r""   #TODO choose good pattern to match
 filtered_background_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_background_documents]
 
 #building structure that holds background candidate occurances over documents
 inverted_index_dict = buildInvertedIndexDict(filtered_background_n_grams)
 
 
-
 #document to analyze
-document = readDocument("doc_ex3")
+document = readDocument()
 query_document_terms = prepareDocuments([document])
 
 #n-grammed document
 n_grammed_document = [getWordGrams(words) for words in query_document_terms]
+
+#removing stopword
+filtered_n_grams = removeStopWords(n_grammed_document)
 
 #filtering
 filtered_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_document]
