@@ -69,7 +69,8 @@ def prepareDocuments(documents):
 
     for document in documents:
         translate_table = dict((ord(char), None) for char in string.punctuation)
-        clean_docs.append(document.translate(translate_table))
+        removed_punctuation = document.translate(translate_table)
+        clean_docs.append(removed_punctuation)
 
     tokenized_docs = [nltk.word_tokenize(d) for d in clean_docs]
 
@@ -84,10 +85,19 @@ def getWordGrams(words, min=1, max=3):
     """
 
     s = []
+    remove = False
 
     for n in range(min, max):
         for ngram in ngrams(words, n):
-            s.append(' '.join(str(i) for i in ngram))
+            for idx,word in enumerate(ngram):
+                if word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
+                    remove = True
+                    break
+                    
+            if remove == False:
+                s.append(' '.join(ngram))
+            else:
+                remove = False
 
     return s
 

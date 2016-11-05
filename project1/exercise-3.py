@@ -2,8 +2,8 @@ import os
 import math
 import re
 import nltk
+import datetime
 
-from nltk.corpus import stopwords
 from sklearn.datasets import fetch_20newsgroups
 
 
@@ -106,35 +106,6 @@ def filterNGrams(list, regex_pattern):
 
     return filtered
 
-def removeStopWords(doc_list):
-    """
-    Removes terms containing stopwords except trigram containing stopword in the middle "word1 stopword word2"
-    """
-    filtered_docs = []
-    remove = False
-
-    for doc_terms in doc_list:
-        filtered_doc = []
-        for term in doc_terms:
-            words = term.split(' ')
-            for idx,word in enumerate(words):
-                if word in stopwords.words('english'):
-                    if len(words) == 3 and idx == 1:        #if is trigram and stopword in the middle: don't remove
-                        continue
-                    else:
-                        remove = True
-                        break
-
-            if remove == False:
-                filtered_doc.append(term)
-
-            remove = False
-
-        filtered_docs.append(filtered_doc)
-
-
-    return filtered_docs
-
 def retrieveAverageDocLength(documents):
     total_documents_terms = 0
 
@@ -151,40 +122,42 @@ def retrieveAverageDocLength(documents):
 #background documents
 background_documents = fetch_20newsgroups(subset='train')
 
-#tokenizing, removing stopwords and punctuation from background collection
+print("Preparing background " + str(datetime.datetime.utcnow()))
+#tokenizing, removing punctuation from background collection
 documents = prepareDocuments(background_documents.data)
 
 #getting background  avgdl and N
 average_document_length = retrieveAverageDocLength(documents)
 number_background_documents = len(documents)
 
+print("Getting n-grams " + str(datetime.datetime.utcnow()))
 #getting background documents n-grams
-n_grammed_background_documents = [getWordGrams(words) for words in documents]
+n_grammed_background_documents = [getWordGrams(words, min=1, max=4) for words in documents]
 
-#remove stopwords
-filtered_background_n_grams = removeStopWords(n_grammed_background_documents)
-
+print("Filtering candidates " + str(datetime.datetime.utcnow()))
 #filtering background candidates
 filtering_regex = r"((JJ\s)*(NN(S|(PS)|P)?\s)+IN\s)?((JJ\s)*(NN(S|(PS)|P)?\s?)+)+"
 filtered_background_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_background_documents]
 
+print("Building occurance dictionary " + str(datetime.datetime.utcnow()))
 #building structure that holds background candidate occurances over documents
 inverted_index_dict = buildInvertedIndexDict(filtered_background_n_grams)
 
+print("#### Foreground ####")
 
+print("Preparing " + str(datetime.datetime.utcnow()))
 #document to analyze
-document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex3"))
-query_document_terms = prepareDocuments([document])
+query_document_terms = prepareDocuments([unicode(readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex3")), "ISO-8859-1")])
 
+print("Getting n-grams " + str(datetime.datetime.utcnow()))
 #n-grammed document
-n_grammed_document = [getWordGrams(words) for words in query_document_terms]
+n_grammed_document = [getWordGrams(words, min=1, max=4) for words in query_document_terms]
 
-#removing stopword
-filtered_n_grams = removeStopWords(n_grammed_document)
-
+print("Filtering " + str(datetime.datetime.utcnow()))
 #filtering
 filtered_n_grams = [filterNGrams(n_gram, filtering_regex) for n_gram in n_grammed_document]
 
+print("Scoring candidates " + str(datetime.datetime.utcnow()))
 #score for each candidate
 scores = performCandidateScoring(inverted_index_dict, filtered_n_grams[0], n_grammed_document[0], average_document_length, number_background_documents)
 

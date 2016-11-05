@@ -1,17 +1,30 @@
 import math
 import os
+import datetime
 
 from util import readDocument
 from util import prepareDocuments
 from util import getWordGrams
 from util import printTopNTerms
 
+def getBackgroundDocuments(path=os.path.join(os.path.dirname(__file__), "dataset", "documents")):
+    fileNames = os.listdir(path)
+    fileNames.sort()
+    background_documents = []
+
+    for doc in fileNames:
+        text = readDocument(os.path.join(path, doc))
+        utf = unicode(text, "ISO-8859-1")
+        background_documents.append(utf)
+
+    return background_documents
+
 def buildTermCountDict(doc_list):
 
     freq_dict = {}
 
     for doc in doc_list:
-        n_grams = getWordGrams(doc)
+        n_grams = getWordGrams(doc, min=1, max=3)
 
         for term in n_grams:
             if term in freq_dict:
@@ -82,13 +95,16 @@ def calcLM2(term, freq_dict, total_unigram_count):
 ## Main starts here
 ##################################################################
 
-fg = prepareDocuments([readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex4"))])
-bg = prepareDocuments(["palavras lol epa palavras lol epa assim lol epa lol lol epa assim doc1"])   #TODO read background from collection
+print("Preparing " + str(datetime.datetime.utcnow()))
+fg = prepareDocuments([unicode(readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex4")), "ISO-8859-1")])
+bg = prepareDocuments(getBackgroundDocuments())
 
+print("Building occurance dictionaries " + str(datetime.datetime.utcnow()))
 #dictionaries holding each term (n-gram) ocurrance number
 fg_dict, fg_unigram_count = buildTermCountDict(fg)
 bg_dict, bg_unigram_count = buildTermCountDict(bg)
 
+print("Scoring candidates " + str(datetime.datetime.utcnow()))
 #KLDiv score per candidate
 scores = calcCandidateKLDivScore(fg_dict, bg_dict, fg_unigram_count, bg_unigram_count)
 
