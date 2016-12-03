@@ -23,8 +23,7 @@ def calcPR(candidate, graph, candidate_scores, prior_weight_type, edge_weight_ty
     if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
         denominator = 0
         for neighbor_candidate in linked_candidates:
-            if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
-                denominator += candidate_scores[neighbor_candidate]['sentence_prior_weight']
+            denominator += candidate_scores[neighbor_candidate]['sentence_prior_weight']
 
         prior_weight_part = candidate_scores[candidate]['sentence_prior_weight'] / denominator
     else:
