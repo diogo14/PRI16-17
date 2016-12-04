@@ -1,6 +1,6 @@
 import nltk
 import string
-
+import re
 from nltk.util import ngrams
 from nltk.corpus import stopwords
 
@@ -14,12 +14,20 @@ def removeStopWords(list_terms):
     return [token for token in list_terms if token not in stopwords.words('english')]
 
 def removePunctuation(text):
-    return text.translate(None, string.punctuation)
+
+    if type(text) is str:
+        return text.translate(None, string.punctuation)
+    else:   #unicode
+        return text.translate(dict((ord(char), None) for char in string.punctuation))
 
 def getWordGrams(words, min=1, max=3):
     """
     Getting n-grams in a specified range
     """
+
+    if '' in words:       #just in case
+        words.remove('')
+
     s = []
     remove = False
 
@@ -34,13 +42,20 @@ def getWordGrams(words, min=1, max=3):
                 s.append(' '.join(ngram))
             else:
                 remove = False
+
+
     return s
 
 def printTopCandidates(scores, n):
 
     # reverse ordering of candidates scores
-    top_candidates = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    top_candidates = getOrderedCandidates(scores)
 
     # top 5 candidates
     for candidate in top_candidates[:n]:
         print("" + str(candidate[0]) + " - " + str(candidate[1]))
+
+
+def getOrderedCandidates(scores):   #decreasing order
+    # reverse ordering of candidates scores
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True)

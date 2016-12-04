@@ -2,12 +2,26 @@ import os
 import networkx as nx
 import nltk
 from nltk.tokenize.punkt import PunktSentenceTokenizer
+import xml.etree.ElementTree as ET
 
-from util import readDocument
 from util import removePunctuation
 from util import getWordGrams
 from util import printTopCandidates
+from util import getOrderedCandidates
 
+root = ET.parse(os.path.join(os.path.dirname(__file__), "resources", "MiddleEast.xml"))
+articles = root.findall('./channel/item')
+
+data = ""
+
+for article in articles:
+    data += article.findall('./title')[0].text.lower() + "."
+    data +=  article.findall('./description')[0].text.lower() + "."
+
+data = data.encode('ascii', 'ignore')   #TODO better encoding
+
+
+################ Keyphrase extraction part ####################
 
 def calcPR(candidate, graph, candidate_scores):
 
@@ -16,22 +30,20 @@ def calcPR(candidate, graph, candidate_scores):
     N = len(candidate_scores)            #number of candidates
     d = 0.5
 
+    #print linked_candidates
+
     summatory = 0.0
     for neighbor_candidate in linked_candidates:
         summatory += candidate_scores[neighbor_candidate] / float(number_linked_candidates)
 
     return d/N + (1-d) * summatory
 
-
-#######################################################################################################################
-
-document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1")).decode('utf-8')
-
-sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document))   #with removed punctuation
+sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(data))   #with removed punctuation
 n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
-tokenized_document = nltk.word_tokenize(removePunctuation(document))
+tokenized_document = nltk.word_tokenize(removePunctuation(data))
 n_grammed_document = getWordGrams(tokenized_document, 1, 4)
+
 
 g = nx.Graph()
 g.add_nodes_from(n_grammed_document)
@@ -56,5 +68,10 @@ for i in range(0, 50):
         score = calcPR(candidate, g, candidate_PR_scores)
         candidate_PR_scores[candidate] = score
 
+###################################################################
 
-printTopCandidates(candidate_PR_scores, 15)
+printTopCandidates(candidate_PR_scores, 10)
+
+ordered_candidates = getOrderedCandidates(candidate_PR_scores)
+
+#TODO show results

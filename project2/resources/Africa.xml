@@ -1,0 +1,565 @@
+<?xml version="1.0"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:nyt="http://www.nytimes.com/namespaces/rss/2.0" version="2.0">
+  <channel>
+    <title>NYT &gt; Africa</title>
+    <link>http://www.nytimes.com/pages/world/africa/index.html?partner=rss&amp;emc=rss</link>
+    <atom:link rel="self" type="application/rss+xml" href="http://www.nytimes.com/services/xml/rss/nyt/Africa.xml"/>
+    <description/>
+    <language>en-us</language>
+    <copyright>Copyright 2016  The New York Times Company</copyright>
+    <lastBuildDate>Sat, 03 Dec 2016 22:04:05 GMT </lastBuildDate>
+    <image>
+      <title>NYT &gt; Africa</title>
+      <url>https://static01.nyt.com/images/misc/NYT_logo_rss_250x40.png</url>
+      <link>http://www.nytimes.com/pages/world/africa/index.html?partner=rss&amp;emc=rss</link>
+    </image>
+    <item>
+      <title>Gambians Celebrate Defeat of Longtime President</title>
+      <link>http://www.nytimes.com/2016/12/03/world/africa/gambia-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/03/world/africa/gambia-yahya-jammeh-adama-barrow.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/03/world/africa/gambia-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/world/GAMBIA/GAMBIA-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Adama Barrow, Gambia&#x2019;s president-elect. His rise happened quickly late in the race.</media:description>
+      <media:credit>Jerome Delay/Associated Press</media:credit>
+      <description>After Yahya Jammeh, who led Gambia for 22 years, lost an election on Thursday, thousands of people across the country welcomed the end of his oppressive government,</description>
+      <dc:creator>JAIME YAYA BARRY and DIONNE SEARCEY</dc:creator>
+      <pubDate>Sat, 03 Dec 2016 18:43:59 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gambia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Jammeh, Yahya</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Barrow, Adama (1965- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+    </item>
+    <item>
+      <title>Gambia&#x2019;s President, in Power 22 Years, Loses Election</title>
+      <link>http://www.nytimes.com/2016/12/02/world/africa/gambia-election.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/02/world/africa/gambia-election.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/02/world/africa/gambia-election.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/03/world/03Gambia1/03Gambia1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Adama Barrow, the opposition candidate, campaigning in Talinding, Gambia, on Tuesday. He was declared the winner on Friday.</media:description>
+      <media:credit>Marco Longari/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The electoral commission declared Adama Barrow the upset victor over Yahya Jammeh, one of Africa&#x2019;s most eccentric leaders.</description>
+      <dc:creator>JAIME YAYA BARRY and DIONNE SEARCEY</dc:creator>
+      <pubDate>Fri, 02 Dec 2016 18:52:15 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Elections</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gambia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Jammeh, Yahya</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Barrow, Adama (1965- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Human Rights and Human Rights Violations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+    </item>
+    <item>
+      <title>Gambians Choose Between Ruler of 22 Years and a United Opposition</title>
+      <link>http://www.nytimes.com/2016/12/01/world/africa/gambia-election-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/01/world/africa/gambia-election-yahya-jammeh-adama-barrow.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/01/world/africa/gambia-election-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/02/world/02gambia_web1/02gambia_web1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Voters at a polling station in Banjul, the Gambian capital, on Thursday.</media:description>
+      <media:credit>Marco Longari/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>President Yahya Jammeh predicted a decisive win, but his challenger, Adama Barrow, said, &#x201C;He is not going to be re-elected &#x2014; his era is finished.&#x201D;</description>
+      <dc:creator>THE ASSOCIATED PRESS</dc:creator>
+      <pubDate>Fri, 02 Dec 2016 03:48:23 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gambia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Elections</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Jammeh, Yahya</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Barrow, Adama (1965- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Computers and the Internet</category>
+    </item>
+    <item>
+      <title>One of World&#x2019;s Most Wanted Hashish Smugglers Arrested in Morocco</title>
+      <link>http://www.nytimes.com/2016/12/01/world/africa/hashish-smuggler-ben-ziane-berhili-arrested-in-morocco.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/01/world/africa/hashish-smuggler-ben-ziane-berhili-arrested-in-morocco.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/01/world/africa/hashish-smuggler-ben-ziane-berhili-arrested-in-morocco.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/02/world/02hashish/02hashish-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Ben Ziane Berhili, one of the world&#x2019;s most wanted hashish smugglers, was arrested in Casablanca.</media:description>
+      <media:credit>Palermo Finance Police</media:credit>
+      <description>The capture of Ben Ziane Berhili was the highest-profile arrest yet in an operation that has seized $3.2 billion worth of hashish since 2013.</description>
+      <dc:creator>LORENZO TONDO</dc:creator>
+      <pubDate>Thu, 01 Dec 2016 21:01:21 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Hashish</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Smuggling</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Berhili, Ben Ziane</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Casablanca (Morocco)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Italy</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Drug Abuse and Traffic</category>
+    </item>
+    <item>
+      <title>Mont P&#xE9;ko Journal: Ousting Squatter Farmers to Save Forest, Ivory Coast Sets Off New Crisis</title>
+      <link>http://www.nytimes.com/2016/12/01/world/africa/ivory-coast-forests-cocoa-farmers.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/01/world/africa/ivory-coast-forests-cocoa-farmers.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/01/world/africa/ivory-coast-forests-cocoa-farmers.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/01/world/02cocoa/02cocoa-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Workers filling sacks with cocoa beans at an agricultural cooperative in Guiglo, Ivory Coast.</media:description>
+      <media:credit>Sia Kambou/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>Squatters using protected land to grow cocoa have helped strip the country of four-fifths of its woodlands. Now evicted, many of them are struggling to survive.</description>
+      <dc:creator>SEAN LYNGAAS</dc:creator>
+      <pubDate>Thu, 01 Dec 2016 14:30:02 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Ivory Coast</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Cocoa</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Agriculture and Farming</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Forests and Forestry</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Squatters</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">United Nations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">World Food Program</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Chocolate</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Land Use Policies</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Rationing and Allocation of Resources</category>
+    </item>
+    <item>
+      <title>Ousmane Sow, Sculptor of Larger-Than-Life Figures, Dies at 81</title>
+      <link>http://www.nytimes.com/2016/12/01/arts/ousmane-sow-dead-senegal-sculptor.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/01/arts/ousmane-sow-dead-senegal-sculptor.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/01/arts/ousmane-sow-dead-senegal-sculptor.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/02/arts/sub-02sow-obit/sub-02sow-obit-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Ousmane Sow on the Pont des Arts in Paris in 1999 with his works that were exhibited there.</media:description>
+      <media:credit>Raphael Gaillarde/Gamma-Rapho, via Getty Images</media:credit>
+      <description>In his art, the Senegal-born Mr. Sow relied on his knowledge of the human anatomy from his years working as a physical therapist.</description>
+      <dc:creator>WILLIAM GRIMES</dc:creator>
+      <pubDate>Fri, 02 Dec 2016 01:28:32 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Sow, Ousmane</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Deaths (Obituaries)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Sculpture</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Art</category>
+    </item>
+    <item>
+      <title>Gambia&#x2019;s Leader Vowed to Rule for a Billion Years. A Vote Will Test That.</title>
+      <link>http://www.nytimes.com/2016/11/30/world/africa/gambia-election-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/30/world/africa/gambia-election-yahya-jammeh-adama-barrow.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/30/world/africa/gambia-election-yahya-jammeh-adama-barrow.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/01/world/01Gambia2/01Gambia2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Yahya Jammeh&#x2019;s final rally in Banjul, Gambia, on Tuesday, ahead of the presidential election.</media:description>
+      <media:credit>Jerome Delay/Associated Press</media:credit>
+      <description>Enthusiasm for President Yahya Jammeh&#x2019;s rival has put into question the outcome of the country&#x2019;s election and prompted fears of instability and violence.</description>
+      <dc:creator>JAIME YAYA BARRY</dc:creator>
+      <pubDate>Wed, 30 Nov 2016 19:56:43 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gambia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Elections</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Jammeh, Yahya</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Barrow, Adama (1965- )</category>
+    </item>
+    <item>
+      <title>Tunisia Seeks Foreign Investment to Cement Democratic Gains</title>
+      <link>http://www.nytimes.com/2016/11/30/world/africa/tunisia-investment-arab-spring.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/30/world/africa/tunisia-investment-arab-spring.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/30/world/africa/tunisia-investment-arab-spring.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/01/world/01Tunisia1/01Tunisia1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Prime Minister Youssef Chahed of Tunisia at Parliament in Tunis this month. Only three months into the job, he faces the urgent task of rescuing the economy.</media:description>
+      <media:credit>Fethi Belaid/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The country where the Arab Spring began five years ago is trying to bolster its economy, especially in the less developed interior, as it combats terrorism.</description>
+      <dc:creator>CARLOTTA GALL</dc:creator>
+      <pubDate>Wed, 30 Nov 2016 17:40:31 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Economic Conditions and Trends</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Labor and Jobs</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Tunis (Tunisia)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Essebsi, Beji Caid</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Tunisia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Chahed, Youssef (1975- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Foreign Investments</category>
+    </item>
+    <item>
+      <title>Trilobites: Study Suggests 3.2 Million-Year-Old Lucy Spent a Lot of Time in Trees</title>
+      <link>http://www.nytimes.com/2016/11/30/science/lucy-bones-trees.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/30/science/lucy-bones-trees.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/30/science/lucy-bones-trees.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/01/science/01TB-LUCY1/01TB-LUCY1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>The fossil specimen of Australopithecus afarensis known as Lucy.</media:description>
+      <media:credit>John Kappelman/The University of Texas at Austin</media:credit>
+      <description>The bones of the famous fossil were pretty thick, suggesting she had a ratio of strength between her arms and legs more like a chimp than a human.</description>
+      <dc:creator>JOANNA KLEIN</dc:creator>
+      <pubDate>Wed, 30 Nov 2016 21:48:58 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Skeletons</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Paleontology</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Monkeys and Apes</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Australopithecines</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Trees and Shrubs</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Bones</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">PLoS One (Journal)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Kappelman, John W</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Ruff, Christopher B</category>
+    </item>
+    <item>
+      <title>A.N.C. Rejects Calls for Jacob Zuma to Quit South African Presidency</title>
+      <link>http://www.nytimes.com/2016/11/29/world/africa/jacob-zuma-south-africa-african-national-congress.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/29/world/africa/jacob-zuma-south-africa-african-national-congress.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/29/world/africa/jacob-zuma-south-africa-african-national-congress.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/30/world/30Zuma/30Zuma-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Jacob Zuma of South Africa in Johannesburg this month.</media:description>
+      <media:credit>Gianluigi Guercia/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>Leaders of the African National Congress, after a debate among party members, reaffirmed their support for the unpopular leader.</description>
+      <dc:creator>NORIMITSU ONISHI</dc:creator>
+      <pubDate>Tue, 29 Nov 2016 16:44:28 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Zuma, Jacob G</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">African National Congress</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">South Africa</category>
+    </item>
+    <item>
+      <title>President Jacob Zuma of South Africa Faces Leadership Challenge</title>
+      <link>http://www.nytimes.com/2016/11/28/world/africa/jacob-zuma-south-africa-anc.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/28/world/africa/jacob-zuma-south-africa-anc.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/28/world/africa/jacob-zuma-south-africa-anc.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/29/world/29zuma/29zuma-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Jacob Zuma of South Africa, shown during the opening of parliament last year in Cape Town, has been embroiled in one scandal after another since taking office in 2009.</media:description>
+      <media:credit>Nic Bothma/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The African National Congress&#x2019;s national executive committee introduced, for the first time, a motion urging the embattled Mr. Zuma to step down.</description>
+      <dc:creator>NORIMITSU ONISHI</dc:creator>
+      <pubDate>Mon, 28 Nov 2016 18:50:59 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Zuma, Jacob G</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Apartheid (Policy)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">African National Congress</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">South Africa</category>
+    </item>
+    <item>
+      <title>Global Health: Summer Project Turns Into Leukemia Testing Breakthrough</title>
+      <link>http://www.nytimes.com/2016/11/28/health/chronic-myeloid-leukemia-test.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/28/health/chronic-myeloid-leukemia-test.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/28/health/chronic-myeloid-leukemia-test.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/29/science/29GLOBAL/29GLOBAL-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Researchers with a sample card with dried blood that can be used to test for chronic myeloid leukemia.</media:description>
+      <media:credit>Robert Hood/Fred Hutch News Service</media:credit>
+      <description>What began as a student effort at a lab in Seattle produced a test for chronic myeloid leukemia that works with a few spots of dried blood on a paper card.</description>
+      <dc:creator>DONALD G. McNEIL Jr.</dc:creator>
+      <pubDate>Mon, 28 Nov 2016 17:45:50 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Tests (Medical)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Drugs (Pharmaceuticals)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Leukemia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Third World and Developing Countries</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Novartis AG</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_keyword">Gleevec</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Hutchinson, Fred, Cancer Research Center</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Blood</category>
+    </item>
+    <item>
+      <title>Al Jazeera Film Critical of Egyptian Army Strains Egypt-Qatar Ties Further</title>
+      <link>http://www.nytimes.com/2016/11/28/world/middleeast/al-jazeera-egypt-qatar.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/28/world/middleeast/al-jazeera-egypt-qatar.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/28/world/middleeast/al-jazeera-egypt-qatar.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/30/world/29EGYPT-2/29EGYPT-2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Sameh Shoukry, the foreign minister of Egypt.</media:description>
+      <media:credit>Mohamed El-Shahed/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The documentary, broadcast on a network owned by the Qatari government, accuses Egypt of abusing its recruits, and the country was quick to denounce it.</description>
+      <dc:creator>NOUR YOUSSEF</dc:creator>
+      <pubDate>Tue, 29 Nov 2016 03:55:16 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Documentary Films and Programs</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Al Jazeera</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Egypt</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Qatar</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Defense and Military Forces</category>
+    </item>
+    <item>
+      <title>A Forgotten Step in Saving African Wildlife: Protecting the Rangers</title>
+      <link>http://www.nytimes.com/2016/11/28/science/a-forgotten-step-in-saving-african-wildlife-protecting-the-rangers.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/28/science/a-forgotten-step-in-saving-african-wildlife-protecting-the-rangers.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/28/science/a-forgotten-step-in-saving-african-wildlife-protecting-the-rangers.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/29/science/29RANGER/29RANGER-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>David Piroris, left, and Solomon Ngila of the Lewa Wildlife Conservancy&#x2019;s antipoaching dog unit in Kenya, training Maxo.</media:description>
+      <media:credit>Rachel Nuwer</media:credit>
+      <description>Many park personnel, responsible for fending off poachers, go without basic necessities like boots, tents and health insurance. Some groups are trying to change that.</description>
+      <dc:creator>RACHEL NUWER</dc:creator>
+      <pubDate>Mon, 28 Nov 2016 19:00:51 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Animals</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Poaching (Wildlife)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Lewa Wildlife Conservancy</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">World Wildlife Fund</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Endangered and Extinct Species</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Parks and Other Recreation Areas</category>
+    </item>
+    <item>
+      <title>Ugandan Troops Move Against Tribal King in Rebel Region</title>
+      <link>http://www.nytimes.com/2016/11/27/world/africa/ugandan-troops-move-against-tribal-king-in-rebel-region.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/27/world/africa/ugandan-troops-move-against-tribal-king-in-rebel-region.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/27/world/africa/ugandan-troops-move-against-tribal-king-in-rebel-region.html?partner=rss&amp;emc=rss"/>
+      <description>Security forces clashed with palace guards and removed the leader of the Bakonzo people, a vocal critic of President Yoweri Museveni.</description>
+      <dc:creator>THE ASSOCIATED PRESS</dc:creator>
+      <pubDate>Sun, 27 Nov 2016 23:17:13 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Uganda</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Mumbere, Charles Wesley</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Museveni, Yoweri</category>
+    </item>
+    <item>
+      <title>Obama Expands War With Al Qaeda to Include Shabab in Somalia</title>
+      <link>http://www.nytimes.com/2016/11/27/us/politics/obama-expands-war-with-al-qaeda-to-include-shabab-in-somalia.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/27/us/politics/obama-expands-war-with-al-qaeda-to-include-shabab-in-somalia.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/27/us/politics/obama-expands-war-with-al-qaeda-to-include-shabab-in-somalia.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/28/world/28SOMALIA/28SOMALIA-moth-v2.jpg" medium="image" height="151" width="151"/>
+      <media:description>Bystanders surveyed damage from a car bomb in Mogadishu, Somalia, on Saturday. The blast killed at least 11 people and wounded 16 others.</media:description>
+      <media:credit>Farah Abdi Warsameh/Associated Press</media:credit>
+      <description>The administration&#x2019;s move to stretch a 2001 war authorization will strengthen Donald J. Trump&#x2019;s authority to combat thousands of Somali militants, and has drawn objections from some experts.</description>
+      <dc:creator>CHARLIE SAVAGE, ERIC SCHMITT and MARK MAZZETTI</dc:creator>
+      <pubDate>Sun, 27 Nov 2016 21:15:27 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Shabab</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Somalia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Obama, Barack</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Al Qaeda</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Targeted Killings</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Terrorism</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Surt (Libya)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">September 11 (2001)</category>
+    </item>
+    <item>
+      <title>What in the World: Which Language Uses the Most Sounds? Click 5 Times for the Answer</title>
+      <link>http://www.nytimes.com/2016/11/25/world/what-in-the-world/click-languages-taa-xoon-xoo-botswana.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/25/world/what-in-the-world/click-languages-taa-xoon-xoo-botswana.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/25/world/what-in-the-world/click-languages-taa-xoon-xoo-botswana.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/10/28/world/wit-botswana-xoon/wit-botswana-xoon-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Speakers of Khoisan languages, like the San people in Namibia, use click consonants, packing a lot of information into brief words.</media:description>
+      <media:credit>Eric Lafforgue/Gamma-Rapho, via Getty Images</media:credit>
+      <description>Taa, spoken by a few thousand people in Botswana and Namibia, is believed to have the largest sound inventory of any language in the world.</description>
+      <dc:creator>BRYANT ROUSSEAU</dc:creator>
+      <pubDate>Fri, 25 Nov 2016 10:00:23 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Language and Languages</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Namibia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Botswana</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_keyword">Khoisan</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_keyword">Xoon</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_keyword">Taa</category>
+    </item>
+    <item>
+      <title>Land Mine Casualties Jump 75% as Funding for Their Removal Declines</title>
+      <link>http://www.nytimes.com/2016/11/22/world/land-mine-casualties-annual-report.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/22/world/land-mine-casualties-annual-report.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/22/world/land-mine-casualties-annual-report.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/23/world/23LANDMINES-1/23LANDMINES-1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A de-mining operation in Kandahar Province, Afghanistan, in February.</media:description>
+      <media:credit>Javed Tanveer/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>An annual report on the treaty banning land mines showed that casualties hit 6,461 last year, a sharp rise from 2014 and the highest level in a decade.</description>
+      <dc:creator>RICK GLADSTONE</dc:creator>
+      <pubDate>Tue, 22 Nov 2016 19:19:28 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Mines, Explosive</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Treaties</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Improvised Explosive Devices</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">International Campaign to Ban Landmines</category>
+    </item>
+    <item>
+      <title>Global Health: Telling Mosquitoes Apart With a Cellphone</title>
+      <link>http://www.nytimes.com/2016/11/21/health/mosquitoes-cellphones.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/21/health/mosquitoes-cellphones.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/21/health/mosquitoes-cellphones.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/22/science/22GLOBAL/22GLOBAL-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>West Nile virus is spread by Culex mosquitoes. </media:description>
+      <media:credit>James Gathany/C.D.C.</media:credit>
+      <description>Calling their project &#x201C;Shazam for Mosquitoes,&#x201D; Stanford students showed that common mobile phones could distinguish the hums of beating wings, which could prove useful in fighting diseases.</description>
+      <dc:creator>DONALD G. McNEIL Jr.</dc:creator>
+      <pubDate>Mon, 21 Nov 2016 23:11:08 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Mosquitoes</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Cellular Telephones</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Audio Recordings, Downloads and Streaming</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">American Society of Tropical Medicine and Hygiene</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Stanford University</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Research</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">West Nile Virus</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Medicine and Health</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Zika Virus</category>
+    </item>
+    <item>
+      <title>Silenced for Decades, &#x2018;Victims of Despotism&#x2019; Air Torture Claims in Tunisia</title>
+      <link>http://www.nytimes.com/2016/11/19/world/africa/silenced-for-decades-victims-of-despotism-air-torture-claims-in-tunisia.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/19/world/africa/silenced-for-decades-victims-of-despotism-air-torture-claims-in-tunisia.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/19/world/africa/silenced-for-decades-victims-of-despotism-air-torture-claims-in-tunisia.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/19/world/19Tunisia1/19Tunisia1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Mothers of torture victims carried their sons&#x2019; portraits before the Truth and Dignity Commission hearings in Tunis on Thursday.</media:description>
+      <media:credit>Fethi Belaid/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>In long-awaited public hearings, victims and their families recounted abuses from nearly 60 years of dictatorship, including death and persecution.</description>
+      <dc:creator>CARLOTTA GALL</dc:creator>
+      <pubDate>Fri, 18 Nov 2016 20:24:38 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Tunisia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Middle East and North Africa Unrest (2010- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Human Rights and Human Rights Violations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Torture</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Political Prisoners</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Truth and Dignity Commission (Tunisia)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Ben Ali, Zine El-Abidine</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Bourguiba, Habib</category>
+    </item>
+    <item>
+      <title>Fuel Truck Explosion Kills at Least 73 in Mozambique</title>
+      <link>http://www.nytimes.com/2016/11/19/world/africa/mozambique-fuel-truck-explosion.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/19/world/africa/mozambique-fuel-truck-explosion.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/19/world/africa/mozambique-fuel-truck-explosion.html?partner=rss&amp;emc=rss"/>
+      <description>Villagers in a remote part of the African country had been trying to siphon fuel from the vehicle when it was struck by lightning.</description>
+      <dc:creator>NORIMITSU ONISHI</dc:creator>
+      <pubDate>Fri, 18 Nov 2016 10:10:43 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Mozambique</category>
+    </item>
+    <item>
+      <title>Editorial: A Foolish Power Grab in Congo</title>
+      <link>http://www.nytimes.com/2016/11/21/opinion/a-foolish-power-grab-in-congo.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/21/opinion/a-foolish-power-grab-in-congo.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/21/opinion/a-foolish-power-grab-in-congo.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/11/18/opinion/18fri3web/18fri3web-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Joseph Kabila, center, of the Democratic Republic of Congo, at a special joint session of parliament on Tuesday.</media:description>
+      <media:credit>Junior D.Kannah/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>President Joseph Kabila&#x2019;s move to stay in office beyond his term could lead to renewed war in his troubled country.</description>
+      <dc:creator>THE EDITORIAL BOARD</dc:creator>
+      <pubDate>Mon, 21 Nov 2016 08:21:01 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Elections</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Kabila, Joseph</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Congo, Democratic Republic of (Congo-Kinshasa)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Security Council (UN)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Constitutions</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Radio France Internationale</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Editorials</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">United Nations</category>
+    </item>
+    <item>
+      <title>Fixes: Up in the Sky, Help to Keep Africans From Starving</title>
+      <link>http://www.nytimes.com/2016/11/08/opinion/up-in-the-sky-help-to-keep-africans-from-starving.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/08/opinion/up-in-the-sky-help-to-keep-africans-from-starving.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/08/opinion/up-in-the-sky-help-to-keep-africans-from-starving.html?partner=rss&amp;emc=rss"/>
+      <description>Satellite images help insurers predict when drought is likely to kill cattle, so they can aid herders whose own lives depend on their livestock.</description>
+      <dc:creator>TINA ROSENBERG</dc:creator>
+      <pubDate>Tue, 08 Nov 2016 08:21:01 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Health Insurance and Managed Care</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Livestock</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Drought</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Satellites</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Africa</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Shariah (Islamic Law)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Nomadic People</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Poverty</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Third World and Developing Countries</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">International Livestock Research Institute</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Kenya</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Ethiopia</category>
+    </item>
+    <item>
+      <title>Africa Takes Its Turn on the Runway</title>
+      <link>http://www.nytimes.com/2016/08/21/fashion/african-catwalk-fashion-photography-book.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/08/21/fashion/african-catwalk-fashion-photography-book.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/08/21/fashion/african-catwalk-fashion-photography-book.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/08/21/fashion/21AFRICA2-WEB/21AFRICA2-WEB-1471458163151-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Tatum Keshwar, a former Miss South Africa, walks in David Tlale&#x2019;s show on the Nelson Mandela Bridge in Johannesburg in 2011.</media:description>
+      <media:credit>Per-Anders Pettersson</media:credit>
+      <description>For &#x201C;African Catwalk,&#x201D; the Swedish photographer Per-Anders Pettersson spent five years documenting the energy of Africa&#x2019;s emerging fashion industry.</description>
+      <dc:creator>WHITNEY RICHARDSON</dc:creator>
+      <pubDate>Thu, 18 Aug 2016 19:58:00 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Fashion and Apparel</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Photography</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_ttl">African Catwalk (Book)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Pettersson, Per-Anders</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Tlale, David (1975- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Ngxokolo, Laduma (1986- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">African Fashion International</category>
+    </item>
+    <item>
+      <title>Lens Blog: Young Africans, Wrapped in Tradition</title>
+      <link>http://lens.blogs.nytimes.com/2016/03/02/joana-choumali-africa-ivory-coast-portrait-photos/?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://lens.blogs.nytimes.com/2016/03/02/joana-choumali-africa-ivory-coast-portrait-photos/</guid>
+      <atom:link rel="standout" href="http://lens.blogs.nytimes.com/2016/03/02/joana-choumali-africa-ivory-coast-portrait-photos/?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/03/01/blogs/20160301-lens-joana-1/20160301-lens-joana-1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Soukeyna is studing marketing in France. She is wearing her great-grandmother&#x2019;s outfit from Ivory Coast.</media:description>
+      <media:credit>Joanna Choumali</media:credit>
+      <description>Joana Choumali, a photographer from Ivory Coast, is documenting modern African women wearing traditional clothing. She said these portraits allow her subjects to reconnect with their family history.</description>
+      <dc:creator>WHITNEY RICHARDSON</dc:creator>
+      <pubDate>Thu, 03 Mar 2016 17:42:16 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/">Choumali, Joana</category>
+      <category domain="http://www.nytimes.com/namespaces/">Ivory Coast</category>
+      <category domain="http://www.nytimes.com/namespaces/">Photography</category>
+      <category domain="http://www.nytimes.com/namespaces/">Women and Girls</category>
+      <category domain="http://www.nytimes.com/namespaces/">Showcase</category>
+    </item>
+    <item>
+      <title>Can Television Be Fair to Muslims?</title>
+      <link>http://www.nytimes.com/2016/11/30/arts/television/can-television-be-fair-to-muslims.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/30/arts/television/can-television-be-fair-to-muslims.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/30/arts/television/can-television-be-fair-to-muslims.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/arts/04COVER1/04COVER1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description/>
+      <media:credit>Anna Parini</media:credit>
+      <description>Writers and showrunners &#x2014; including those for &#x201C;24&#x201D; and &#x201C;Quantico&#x201D; &#x2014; talk about casting, cultural gaps and the networks&#x2019; desire for stories about terrorism.</description>
+      <dc:creator>MELENA RYZIK</dc:creator>
+      <pubDate>Wed, 30 Nov 2016 10:00:38 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Television</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Muslims and Islam</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Muslim Americans</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Gordon, Howard</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Safran, Joshua (1974- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Mandvi, Aasif</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Nawaz, Zarqa (1968- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Dabis, Cherien</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_ttl">24 (TV Program)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_ttl">Homeland (TV Program)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_ttl">Quantico (TV Program)</category>
+    </item>
+    <item>
+      <title>Behind Tiger Woods&#x2019;s Return, a (Ryder Cup) Team Effort</title>
+      <link>http://www.nytimes.com/2016/12/03/sports/golf/tiger-woods-hero-world-challenge.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/03/sports/golf/tiger-woods-hero-world-challenge.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/03/sports/golf/tiger-woods-hero-world-challenge.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/sports/04TIGERweb1/04TIGERweb1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Tiger Woods, right, with Bubba Watson after the United States defeated Europe at this year&#x2019;s Ryder Cup.</media:description>
+      <media:credit>Ross Kinnaird/Getty Images</media:credit>
+      <description>After Woods&#x2019;s selfless work as an assistant captain, members of the winning United States squad showed their support for him in his comeback from a back injury.</description>
+      <dc:creator>KAREN CROUSE</dc:creator>
+      <pubDate>Sat, 03 Dec 2016 17:03:20 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Woods, Tiger</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Golf</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Ryder Cup (Golf)</category>
+    </item>
+    <item>
+      <title>Sports of The Times: At Liberty University, All Sins Are Forgiven on the Altar of Football</title>
+      <link>http://www.nytimes.com/2016/12/03/sports/ncaafootball/baylor-liberty-university-sexual-assaults.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/03/sports/ncaafootball/baylor-liberty-university-sexual-assaults.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/03/sports/ncaafootball/baylor-liberty-university-sexual-assaults.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/sports/04POWELLjp/04POWELLjp-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Ian McCaw, left, and Ken Starr, then Baylor&#x2019;s president, with the women&#x2019;s basketball team in February. Both left the school amid a sexual violence scandal that engulfed the football program.</media:description>
+      <media:credit>Tony Gutierrez/Associated Press</media:credit>
+      <description>Liberty, a Christian university that covets a higher athletic profile, looked the other way and found an athletic director who did the same.</description>
+      <dc:creator>MICHAEL POWELL</dc:creator>
+      <pubDate>Sat, 03 Dec 2016 10:25:13 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Liberty University</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Football (College)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Appointments and Executive Changes</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Baylor University</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Sex Crimes</category>
+    </item>
+    <item>
+      <title>Feature: &#x2018;We Are Orphans Here&#x2019;</title>
+      <link>http://www.nytimes.com/2016/12/01/magazine/we-are-orphans-here.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/12/01/magazine/we-are-orphans-here.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/12/01/magazine/we-are-orphans-here.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/magazine/04refugee1/04refugee1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Palestinian children waiting inside the Shuafat Refugee Camp for buses to take them to school.</media:description>
+      <media:credit>Luca Locatelli/Institute, for The New York Times</media:credit>
+      <description>Life and death in East Jerusalem&#x2019;s Palestinian refugee camp.</description>
+      <dc:creator>RACHEL KUSHNER</dc:creator>
+      <pubDate>Thu, 01 Dec 2016 10:00:03 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Arab-Israeli War (1967)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Shuafat Refugee Camp</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Palestinians</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Jerusalem (Israel)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Infrastructure (Public Works)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Refugees and Displaced Persons</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Murders, Attempted Murders and Homicides</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Middle East and Africa Migrant Crisis</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Drug Abuse and Traffic</category>
+    </item>
+    <item>
+      <title>Feature: How to Hide $400 Million</title>
+      <link>http://www.nytimes.com/2016/11/30/magazine/how-to-hide-400-million.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">http://www.nytimes.com/2016/11/30/magazine/how-to-hide-400-million.html</guid>
+      <atom:link rel="standout" href="http://www.nytimes.com/2016/11/30/magazine/how-to-hide-400-million.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2016/12/04/magazine/04divorce1/04divorce1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description/>
+      <media:credit>Illustration by R. Kikuo Johnson</media:credit>
+      <description>When a wealthy businessman set out to divorce his wife, their fortune vanished. The quest to find it would reveal the depths of an offshore financial system bigger than the U.S. economy.</description>
+      <dc:creator>NICHOLAS CONFESSORE</dc:creator>
+      <pubDate>Wed, 30 Nov 2016 10:00:03 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Taxation</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Divorce, Separations and Annulments</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Robert Oesterlund</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Suits and Litigation (Civil)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Tax Evasion</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Frauds and Swindling</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Sarah Pursglove</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Tax Shelters</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Internal Revenue Service</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Toronto (Ontario)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Florida</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Cook Islands</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Jeffrey Fisher</category>
+    </item>
+  </channel>
+</rss>

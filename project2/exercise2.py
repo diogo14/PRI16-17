@@ -25,15 +25,15 @@ def calcPR(candidate, graph, candidate_scores, prior_weight_type, edge_weight_ty
         for neighbor_candidate in linked_candidates:
             denominator += candidate_scores[neighbor_candidate]['sentence_prior_weight']
 
-        prior_weight_part = candidate_scores[candidate]['sentence_prior_weight'] / denominator
+        prior_weight_part = candidate_scores[candidate]['sentence_prior_weight'] / float(denominator)
     else:
         prior_weight_part = 0 #TODO TFIDF_PRIOR_WEIGHTS
 
 
     if edge_weight_type == OCCURRENCE_EDGE_WEIGHTS:
-        edge_weight_part = 0
+        edge_weight_part = 0.0
         for neighbor_candidate in linked_candidates:
-            numerator = candidate_scores[neighbor_candidate] * graph[candidate][neighbor_candidate]['weight']
+            numerator = float(candidate_scores[neighbor_candidate]) * graph[candidate][neighbor_candidate]['weight']
 
             denominator = 0
             for linked_to_neighbor_candidate in graph.neighbors(neighbor_candidate):
@@ -41,7 +41,7 @@ def calcPR(candidate, graph, candidate_scores, prior_weight_type, edge_weight_ty
 
             edge_weight_part += numerator / denominator
     else:
-        edge_weight_part = 0 #TODO DISTRIBUTIONAL_EDGE_WEIGHTS
+        edge_weight_part = 0.0 #TODO DISTRIBUTIONAL_EDGE_WEIGHTS
 
 
 
@@ -51,7 +51,7 @@ def calcPR(candidate, graph, candidate_scores, prior_weight_type, edge_weight_ty
 
 #######################################################################################################################
 
-document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1"))
+document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1")).decode('utf-8')
 
 sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document))   #with removed punctuation
 n_grammed_sentences = [getWordGrams(sentence.split(' '), 1, 4) for sentence in sentences]
