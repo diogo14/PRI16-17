@@ -59,3 +59,9 @@ def printTopCandidates(scores, n):
 def getOrderedCandidates(scores):   #decreasing order
     # reverse ordering of candidates scores
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+
+def writeToFile(path, content):
+    f = open(path, 'w')
+    f.write(content)
+    f.close()
