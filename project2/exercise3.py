@@ -10,6 +10,15 @@ def getKeyphrasesFromFile(filePathName):
     keyPhrases = readDocument(filePathName).splitlines()
     return keyPhrases
 
+def checkKeyphrase(docName, term, training_document=False):
+    #returns True if the term is a keyphrase of docName
+    keyphrases = getDocumentRelevantKeyphrases(docName, training_document)
+    if term in keyphrases:
+        return True
+    else:
+        return False
+
+
 def getDocumentNames(training_document=False):
     if (training_document == False):
         path = os.path.join(os.path.dirname(__file__), "dataset", "documents")
@@ -44,13 +53,43 @@ def getDocumentCandidates(docName, training_document=False):
     return [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
 def getAllDocumentCandidates(docNames, training_documents=False):
+    #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
     allCandidates = {}
     for docName in docNames:
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
     return allCandidates
 
-def generateTrainingData(trainingDocuments):
+def calculatePositionFeature(n_grammed_sentences):
+    scores = {}
+    for idx, sentence in enumerate(n_grammed_sentences):
+        prior_weight = len(n_grammed_sentences) - idx  # first sentences have better candidates
+        for gram in sentence:
+            if gram not in scores:
+                scores[gram] = float(prior_weight)
 
+def calculatePRankFeature(n_grammed_sentences):
+    return {}
+
+def generateTrainingData():
+    docNames = getDocumentNames(True)
+    candidates = getAllDocumentCandidates(docNames, True)
+    training_data = []
+    for docName in candidates:
+        scoresPos = calculatePositionFeature(candidates[docName])
+        scoresBM25 = calculateBM25Feature(candidates[docName], candidates)
+        scoresPhrInf = calculatePhrInfFeature(candidates[docName], candidates)
+        scoresPRank = calculatePRankFeature(candidates[docName])
+        for term in scoresPos:
+            #create feature vector
+            score = []
+            score.append(scoresPos[term])
+            score.append(scoresBM25[term])
+            score.append(scoresPhrInf[term])
+            score.append(scoresPRank[term])
+            #check if term is keyphrase
+            bool = checkKeyphrase(docName, term, True)
+            training_data.append((score, bool))
+    return training_data
 
 def PRank(training_data):
     # receives a list of tuples. Each tuple is composed of a list of floats and a boolean (list, boolean)
