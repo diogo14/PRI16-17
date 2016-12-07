@@ -1,12 +1,12 @@
 import nltk
 import string
-import re
+import codecs
 from nltk.util import ngrams
 from nltk.corpus import stopwords
 
 
 def readDocument(docPathName):
-    file = open(docPathName, "r")
+    file = codecs.open(docPathName, "r", "utf-8")
     text = file.read().lower()
     return text
 
@@ -53,7 +53,7 @@ def printTopCandidates(scores, n):
 
     # top 5 candidates
     for candidate in top_candidates[:n]:
-        print("" + str(candidate[0]) + " - " + str(candidate[1]))
+        print("" + candidate[0] + " - " + str(candidate[1]))
 
 
 def getOrderedCandidates(scores):   #decreasing order
@@ -61,35 +61,7 @@ def getOrderedCandidates(scores):   #decreasing order
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
 
-def tokenizeDocument(document):
-    """
-    Tokenizes, removes punctuation
-
-    :param document: string
-    :return: list of strings (document terms)
-    """
-
-    translate_table = dict((ord(char), None) for char in string.punctuation)
-    removed_punctuation = document.translate(translate_table)
-    tokenized_docs = nltk.word_tokenize(removed_punctuation)
-
-    return tokenized_docs
-
-def prepareDocuments(documents):
-    """
-    Tokenizes, removes punctuation
-
-    :param documents: list of strings (documents)
-    :return: list of list of strings (each documents terms)
-    """
-
-    clean_docs = []
-
-    for document in documents:
-        translate_table = dict((ord(char), None) for char in string.punctuation)
-        removed_punctuation = document.translate(translate_table)
-        clean_docs.append(removed_punctuation)
-
-    tokenized_docs = [nltk.word_tokenize(d) for d in clean_docs]
-
-    return tokenized_docs
+def writeToFile(path, content):
+    f = open(path, 'w')
+    f.write(content)
+    f.close()

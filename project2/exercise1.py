@@ -25,16 +25,21 @@ def calcPR(candidate, graph, candidate_scores):
 
 #######################################################################################################################
 
-document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1")).decode('utf-8')
+document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1"))
 
 sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document))   #with removed punctuation
 n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
-tokenized_document = nltk.word_tokenize(removePunctuation(document))
-n_grammed_document = getWordGrams(tokenized_document, 1, 4)
+document_candidates = []
 
-g = nx.Graph()
-g.add_nodes_from(n_grammed_document)
+for sentence in n_grammed_sentences:
+    for candidate in sentence:
+        if candidate not in document_candidates:
+            document_candidates.append(candidate)
+
+
+graph = nx.Graph()
+graph.add_nodes_from(document_candidates)
 
 #adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
 for sentence in n_grammed_sentences:
@@ -43,18 +48,18 @@ for sentence in n_grammed_sentences:
              if another_gram == gram:
                  continue
              else:
-                 g.add_edge(gram, another_gram) #adding duplicate edges has no effect
+                 graph.add_edge(gram, another_gram) #adding duplicate edges has no effect
 
 #initializing each candidate score to 1
 candidate_PR_scores = {}
-for candidate in n_grammed_document:
+for candidate in document_candidates:
     candidate_PR_scores[candidate] = 1
 
 #iterative converging PR score calculation
-for i in range(0, 50):
-    for candidate in n_grammed_document:
-        score = calcPR(candidate, g, candidate_PR_scores)
+for i in range(0, 10):
+    for candidate in document_candidates:
+        score = calcPR(candidate, graph, candidate_PR_scores)
         candidate_PR_scores[candidate] = score
 
 
-printTopCandidates(candidate_PR_scores, 15)
+printTopCandidates(candidate_PR_scores, 10)
