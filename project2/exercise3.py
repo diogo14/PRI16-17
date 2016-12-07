@@ -1,4 +1,55 @@
 from numpy import dot
+import os
+import nltk
+from nltk.tokenize.punkt import PunktSentenceTokenizer
+from util import readDocument
+from util import removePunctuation
+from util import getWordGrams
+
+def getKeyphrasesFromFile(filePathName):
+    keyPhrases = readDocument(filePathName).splitlines()
+    return keyPhrases
+
+def getDocumentNames(training_document=False):
+    if (training_document == False):
+        path = os.path.join(os.path.dirname(__file__), "dataset", "documents")
+    else:
+        path = os.path.join(os.path.dirname(__file__), "training", "documents")
+    fileNames = os.listdir(path)
+    fileNames.sort()
+    return fileNames
+
+def getDocumentContent(docName, training_document=False):
+    if (training_document == False):
+        path = os.path.join(os.path.dirname(__file__), "dataset", "documents", docName)
+    else:
+        path = os.path.join(os.path.dirname(__file__), "training", "documents", docName)
+    return readDocument(path)
+
+def getDocumentRelevantKeyphrases(docName, training_document=False):
+    if(training_document == False):
+        rootPath = os.path.join(os.path.dirname(__file__), "dataset", "indexers")
+        k = []
+        for i in range(1, 7):
+            k.append(getKeyphrasesFromFile(os.path.join(rootPath, "iic" + str(i), docName[:-3] + "key")))
+        return list(set().union(k[0], k[1], k[2], k[3], k[4], k[5]))
+    else:
+        rootPath = os.path.join(os.path.dirname(__file__), "training", "keys")
+        return getKeyphrasesFromFile(os.path.join(rootPath, docName[:-3] + "key"))
+
+def getDocumentCandidates(docName, training_document=False):
+    #returns a list of list of strings (each list contains the ngrams of a sentece)
+    text = getDocumentContent(docName, training_document)
+    sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(text))  # with removed punctuation
+    return [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
+
+def getAllDocumentCandidates(docNames, training_documents=False):
+    allCandidates = {}
+    for docName in docNames:
+        allCandidates[docName] = getDocumentCandidates(docName, training_documents)
+    return allCandidates
+
+def generateTrainingData(trainingDocuments):
 
 
 def PRank(training_data):

@@ -59,3 +59,37 @@ def printTopCandidates(scores, n):
 def getOrderedCandidates(scores):   #decreasing order
     # reverse ordering of candidates scores
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+
+def tokenizeDocument(document):
+    """
+    Tokenizes, removes punctuation
+
+    :param document: string
+    :return: list of strings (document terms)
+    """
+
+    translate_table = dict((ord(char), None) for char in string.punctuation)
+    removed_punctuation = document.translate(translate_table)
+    tokenized_docs = nltk.word_tokenize(removed_punctuation)
+
+    return tokenized_docs
+
+def prepareDocuments(documents):
+    """
+    Tokenizes, removes punctuation
+
+    :param documents: list of strings (documents)
+    :return: list of list of strings (each documents terms)
+    """
+
+    clean_docs = []
+
+    for document in documents:
+        translate_table = dict((ord(char), None) for char in string.punctuation)
+        removed_punctuation = document.translate(translate_table)
+        clean_docs.append(removed_punctuation)
+
+    tokenized_docs = [nltk.word_tokenize(d) for d in clean_docs]
+
+    return tokenized_docs
