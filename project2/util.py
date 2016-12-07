@@ -1,12 +1,12 @@
 import nltk
 import string
-import re
+import codecs
 from nltk.util import ngrams
 from nltk.corpus import stopwords
 
 
 def readDocument(docPathName):
-    file = open(docPathName, "r")
+    file = codecs.open(docPathName, "r", "utf-8")
     text = file.read().lower()
     return text
 
@@ -53,7 +53,7 @@ def printTopCandidates(scores, n):
 
     # top 5 candidates
     for candidate in top_candidates[:n]:
-        print("" + str(candidate[0]) + " - " + str(candidate[1]))
+        print("" + candidate[0] + " - " + str(candidate[1]))
 
 
 def getOrderedCandidates(scores):   #decreasing order

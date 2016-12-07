@@ -21,9 +21,6 @@ for article in articles:
     data += article.findall('./title')[0].text.lower() + "."
     data +=  article.findall('./description')[0].text.lower() + "."
 
-data = data.encode('ascii', 'ignore')   #TODO better encoding
-
-
 ################ Keyphrase extraction part ####################
 
 def calcPR(candidate, graph, candidate_scores):
