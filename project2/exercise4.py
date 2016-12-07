@@ -8,11 +8,10 @@ import xml.etree.ElementTree as ET
 
 from util import removePunctuation
 from util import getWordGrams
-from util import printTopCandidates
 from util import getOrderedCandidates
 from util import writeToFile
 
-root = ET.parse(os.path.join(os.path.dirname(__file__), "resources", "MiddleEast.xml"))
+root = ET.parse(os.path.join(os.path.dirname(__file__), "resources", "Africa.xml"))
 articles = root.findall('./channel/item')
 
 data = ""
@@ -23,30 +22,45 @@ for article in articles:
 
 ################ Keyphrase extraction part ####################
 
-def calcPR(candidate, graph, candidate_scores):
+def pagerank(graph):
+    """Calculates PageRank for an undirected graph"""
 
-    linked_candidates = graph.neighbors(candidate)   #set of candidates that co-occur with candidate
-    number_linked_candidates = len(linked_candidates)    # |Links(Pj)|
-    N = len(candidate_scores)            #number of candidates
-    d = 0.5
+    damping = 0.85
+    N = graph.number_of_nodes()  # number of candidates
+    convergence_threshold = 0.0001
 
-    #print linked_candidates
+    scores = dict.fromkeys(graph.nodes(), 1.0 / N)
 
-    summatory = 0.0
-    for neighbor_candidate in linked_candidates:
-        summatory += candidate_scores[neighbor_candidate] / float(number_linked_candidates)
+    for _ in xrange(100):
+        convergences_achieved = 0
+        for candidate in graph.nodes():
+            linked_candidates = graph.neighbors(candidate)
+            rank = (1-damping)/N + damping * sum(scores[j] / float(len(graph.neighbors(j))) for j in linked_candidates)
 
-    return d/N + (1-d) * summatory
+            if abs(scores[candidate] - rank) <= convergence_threshold:
+                convergences_achieved += 1
+
+            scores[candidate] = rank
+
+        if convergences_achieved == N:
+            break
+
+    return scores
+
 
 sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(data))   #with removed punctuation
 n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
-tokenized_document = nltk.word_tokenize(removePunctuation(data))
-n_grammed_document = getWordGrams(tokenized_document, 1, 4)
+document_candidates = []
+
+for sentence in n_grammed_sentences:
+    for candidate in sentence:
+        if candidate not in document_candidates:
+            document_candidates.append(candidate)
 
 
-g = nx.Graph()
-g.add_nodes_from(n_grammed_document)
+graph = nx.Graph()
+graph.add_nodes_from(document_candidates)
 
 #adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
 for sentence in n_grammed_sentences:
@@ -55,28 +69,19 @@ for sentence in n_grammed_sentences:
              if another_gram == gram:
                  continue
              else:
-                 g.add_edge(gram, another_gram) #adding duplicate edges has no effect
+                 graph.add_edge(gram, another_gram) #adding duplicate edges has no effect
 
-#initializing each candidate score to 1
-candidate_PR_scores = {}
-for candidate in n_grammed_document:
-    candidate_PR_scores[candidate] = 1
 
-#iterative converging PR score calculation
-for i in range(0, 10):
-    for candidate in n_grammed_document:
-        score = calcPR(candidate, g, candidate_PR_scores)
-        candidate_PR_scores[candidate] = score
+candidate_scores = pagerank(graph)
+
 
 ################ Result Output #################################
 
-printTopCandidates(candidate_PR_scores, 10)
-
-ordered_candidates = getOrderedCandidates(candidate_PR_scores)
+ordered_candidates = getOrderedCandidates(candidate_scores)
 
 #adjusting candidate weights to show in word cloud
 # candidate_score * maximum_score / MAXIMUM_WEIGHT
-adjusted_candidate_weights = map(lambda x: {"text" : x[0], "size" : x[1] * 50 / ordered_candidates[0][1]}, ordered_candidates[:10])
+adjusted_candidate_weights = map(lambda x: {"text" : x[0], "size" : x[1] * 50 / ordered_candidates[0][1]}, ordered_candidates)
 
 
 output_dir = os.path.join(os.path.dirname(__file__), "exercise4output")
@@ -104,7 +109,6 @@ if not os.path.isfile(os.path.join(os.path.dirname(output_dir), "index.html")):
 
         var SIZE_W = 800;
         var SIZE_H = 800;
-
 
          readJsonObject("data.json", function(text){
             var words_data = JSON.parse(text);

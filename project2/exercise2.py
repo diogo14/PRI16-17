@@ -15,77 +15,84 @@ OCCURRENCE_EDGE_WEIGHTS = 3
 DISTRIBUTIONAL_EDGE_WEIGHTS = 4
 
 
-def calcPR(candidate, graph, candidate_scores, prior_weight_type, edge_weight_type):
+def pagerank(graph, prior_weight_type, edge_weight_type):
 
-    linked_candidates = graph.neighbors(candidate)   #set of candidates that co-occur with candidate
-    d = 0.5
+    damping = 0.85
+    N = graph.number_of_nodes()  # number of candidates
+    convergence_threshold = 0.0001
 
-    if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
-        denominator = 0
-        for neighbor_candidate in linked_candidates:
-            denominator += candidate_scores[neighbor_candidate]['sentence_prior_weight']
+    scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
 
-        prior_weight_part = candidate_scores[candidate]['sentence_prior_weight'] / float(denominator)
-    else:
-        prior_weight_part = 0 #TODO TFIDF_PRIOR_WEIGHTS
+    for _ in xrange(100):
+        convergences_achieved = 0
 
+        for candidate in graph.nodes():
+            for j in graph.neighbors(candidate):
 
-    if edge_weight_type == OCCURRENCE_EDGE_WEIGHTS:
-        edge_weight_part = 0.0
-        for neighbor_candidate in linked_candidates:
-            numerator = float(candidate_scores[neighbor_candidate]) * graph[candidate][neighbor_candidate]['weight']
+                if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
+                    prior_weight_part = graph.node[candidate]['sentence_prior_weight'] / sum(graph.node[j]['sentence_prior_weight'] for j in graph.neighbors(candidate))
+                else:
+                    prior_weight_part = 0 #TODO TFIDF_PRIOR_WEIGHTS
 
-            denominator = 0
-            for linked_to_neighbor_candidate in graph.neighbors(neighbor_candidate):
-                    denominator += graph[neighbor_candidate][linked_to_neighbor_candidate]['weight']
+                if edge_weight_type == OCCURRENCE_EDGE_WEIGHTS:
+                    weight = graph[candidate][j]['occurrence_weight']
+                    weight_sum = sum(graph[j][k]['occurrence_weight'] for k in graph.neighbors(j))
+                else:
+                    # TODO DISTRIBUTIONAL
+                    weight = 0.0
+                    weight_sum = 0.0
 
-            edge_weight_part += numerator / denominator
-    else:
-        edge_weight_part = 0.0 #TODO DISTRIBUTIONAL_EDGE_WEIGHTS
+                rank = scores[j] * weight / weight_sum
 
+                if abs(scores[candidate] - rank) <= convergence_threshold:
+                    convergences_achieved += 1
 
+                scores[candidate] = rank
 
-    return d * prior_weight_type + (1 - d) * edge_weight_part
+        if convergences_achieved == N:
+            break
+
+    return scores
+
 
 
 
 #######################################################################################################################
 
-document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1")).decode('utf-8')
+document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1"))
 
 sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document))   #with removed punctuation
-n_grammed_sentences = [getWordGrams(sentence.split(' '), 1, 4) for sentence in sentences]
+n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
-tokenized_document = nltk.word_tokenize(removePunctuation(document))
-n_grammed_document = getWordGrams(tokenized_document, 1, 4)
+document_candidates = []
+for sentence in n_grammed_sentences:
+    for candidate in sentence:
+        if candidate not in document_candidates:
+            document_candidates.append(candidate)
 
-g = nx.Graph()
-g.add_nodes_from(n_grammed_document)
 
+graph = nx.Graph()
+graph.add_nodes_from(document_candidates)
 
-#initializing each candidate score to 1
-candidate_scores = {}
-for candidate in n_grammed_document:
-    candidate_scores[candidate] = {'PR' : 1}
 
 #adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
 #adding prior weight for each candidate (based on the sentence it appears by the first time
 for idx, sentence in enumerate(n_grammed_sentences):
-     sentence_prior_weight = len(n_grammed_document) - idx   #first sentences have better candidates
+    prior_weight = len(document_candidates) - idx        #first sentences have better candidates
+    for gram in sentence:
+        if 'sentence_prior_weight' not in graph[gram]:   #set only by the first time
+            graph.node[gram]['sentence_prior_weight'] = float(prior_weight)
 
-     for gram in sentence:
-
-         if 'sentence_prior_weight' not in candidate_scores[gram]:  #only adding prior weight by the first time (greater sentence score)
-            candidate_scores[gram]['sentence_prior_weight'] = sentence_prior_weight
-
-         for another_gram in sentence:
-             if another_gram == gram:
-                 continue
-             else:
-                if not g.has_edge(gram, another_gram):
-                    g.add_edge(gram, another_gram, weight=1)
+        for another_gram in sentence:
+            if another_gram == gram:
+                continue
+            else:
+                if not graph.has_edge(gram, another_gram):
+                    graph.add_edge(gram, another_gram, occurrence_weight=1.0)
                 else:
-                    g[gram][another_gram]['weight'] = g[gram][another_gram]['weight'] + 1   #additional occurrence
+                    graph[gram][another_gram]['occurrence_weight'] = graph[gram][another_gram]['occurrence_weight'] + 1.0   #additional occurrence of candidates
 
 
-#TO BE CONTINUED...
+candidate_scores = pagerank(graph, SENTENCE_PRIOR_WEIGHTS, OCCURRENCE_EDGE_WEIGHTS)
+printTopCandidates(candidate_scores, 10)
+

@@ -9,19 +9,30 @@ from util import getWordGrams
 from util import printTopCandidates
 
 
-def calcPR(candidate, graph, candidate_scores):
+def pagerank(graph):
+    """Calculates PageRank for an undirected graph"""
 
-    linked_candidates = graph.neighbors(candidate)   #set of candidates that co-occur with candidate
-    number_linked_candidates = len(linked_candidates)    # |Links(Pj)|
-    N = len(candidate_scores)            #number of candidates
-    d = 0.5
+    damping = 0.85
+    N = graph.number_of_nodes()  # number of candidates
+    convergence_threshold = 0.0001
 
-    summatory = 0.0
-    for neighbor_candidate in linked_candidates:
-        summatory += candidate_scores[neighbor_candidate] / float(number_linked_candidates)
+    scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
 
-    return d/N + (1-d) * summatory
+    for _ in xrange(100):
+        convergences_achieved = 0
+        for candidate in graph.nodes():
+            linked_candidates = graph.neighbors(candidate)
+            rank = (1-damping)/N + damping * sum(scores[j] / float(len(graph.neighbors(j))) for j in linked_candidates)
 
+            if abs(scores[candidate] - rank) <= convergence_threshold:
+                convergences_achieved += 1
+
+            scores[candidate] = rank
+
+        if convergences_achieved == N:
+            break
+
+    return scores
 
 #######################################################################################################################
 
@@ -31,7 +42,6 @@ sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document)) 
 n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
 document_candidates = []
-
 for sentence in n_grammed_sentences:
     for candidate in sentence:
         if candidate not in document_candidates:
@@ -50,16 +60,8 @@ for sentence in n_grammed_sentences:
              else:
                  graph.add_edge(gram, another_gram) #adding duplicate edges has no effect
 
-#initializing each candidate score to 1
-candidate_PR_scores = {}
-for candidate in document_candidates:
-    candidate_PR_scores[candidate] = 1
 
-#iterative converging PR score calculation
-for i in range(0, 10):
-    for candidate in document_candidates:
-        score = calcPR(candidate, graph, candidate_PR_scores)
-        candidate_PR_scores[candidate] = score
+candidate_scores = pagerank(graph)
 
+printTopCandidates(candidate_scores, 10)
 
-printTopCandidates(candidate_PR_scores, 10)
