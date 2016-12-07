@@ -4,7 +4,6 @@ import nltk
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 
 from util import readDocument
-from util import removePunctuation
 from util import getWordGrams
 from util import printTopCandidates
 
@@ -38,7 +37,7 @@ def pagerank(graph):
 
 document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1"))
 
-sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(document))   #with removed punctuation
+sentences = PunktSentenceTokenizer().tokenize(document)
 n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
 document_candidates = []
