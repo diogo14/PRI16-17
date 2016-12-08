@@ -296,3 +296,19 @@ def getAllDocumentCandidates(docNames, training_documents=False):
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
 
     return allCandidates
+
+def getWordVector(word):
+    f = open(os.path.join(os.path.dirname(__file__), "resources", "glove.6B.50d.txt"), "r")
+    vector = None
+
+    with open(os.path.join(os.path.dirname(__file__), "resources", "glove.6B.50d.txt"), "r") as file:
+        for line in file:
+            if line.startswith(word):
+                vector = line
+                break
+
+    if vector is not None:
+        vector = map(float, vector[vector.find(' ')+1:].split(' '))
+
+    return vector
+

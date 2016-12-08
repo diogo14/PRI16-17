@@ -1,9 +1,5 @@
-import os
 import networkx as nx
-import nltk
-from nltk.tokenize.punkt import PunktSentenceTokenizer
-from util import readDocument
-from util import getWordGrams
+from scipy import spatial
 from util import printTopCandidates
 from util import calculateDocumentEvaluation
 from util import mean_avg_precision
@@ -11,6 +7,8 @@ from util import calculateBM25Feature
 from util import getCandidatesfromDocumentSentences
 from util import getDocumentNames
 from util import getAllDocumentCandidates
+from util import getWordVector
+
 
 #code readability constants
 SENTENCE_PRIOR_WEIGHTS = 1
@@ -61,8 +59,16 @@ def pagerank(graph, prior_weight_type, edge_weight_type):
 
     return scores
 
-def computeSimilarity(word1, word2):
-    return 0.0
+def computeSimilarityWeight(word1, word2):
+
+    vector1 = getWordVector(word1)
+    vector2 = getWordVector(word2)
+
+    if vector1 is None or vector2 is None:
+        return 0.0
+    else:
+        return 1 - spatial.distance.cosine(vector1, vector2) + 1
+
 
 def createWeightedGraph(docName, FGn_grammed_sentences, BGn_grammed_docs):
 
@@ -86,7 +92,7 @@ def createWeightedGraph(docName, FGn_grammed_sentences, BGn_grammed_docs):
                     continue
                 else:
                     if not graph.has_edge(gram, another_gram):
-                        graph.add_edge(gram, another_gram, occurrence_weight=1.0, similarity_weight=computeSimilarity(gram, another_gram))
+                        graph.add_edge(gram, another_gram, occurrence_weight=1.0, similarity_weight=computeSimilarityWeight(gram, another_gram))
                     else:
                         graph[gram][another_gram]['occurrence_weight'] = graph[gram][another_gram][
                                                                              'occurrence_weight'] + 1.0  # additional occurrence of candidates

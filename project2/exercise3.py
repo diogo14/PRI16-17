@@ -1,26 +1,15 @@
 from numpy import dot
-import os
-import nltk
 import math
-from nltk.tokenize.punkt import PunktSentenceTokenizer
-from util import readDocument
 from util import getWordGrams
 from util import createGraph
 from util import pagerank
 from util import getCandidatesfromDocumentSentences
-from util import getTopCandidates
-from util import precision
-from util import f1
-from util import recall
-from util import avg_precision
 from util import mean_avg_precision
 from util import calculateBM25Feature
 from util import getDocumentRelevantKeyphrases
 from util import getDocumentNames
 from util import getAllDocumentCandidates
 from util import calculateDocumentEvaluation
-
-from multiprocessing.dummy import Pool as ThreadPool
 
 from time import gmtime, strftime
 
