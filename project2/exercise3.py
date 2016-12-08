@@ -14,95 +14,16 @@ from util import f1
 from util import recall
 from util import avg_precision
 from util import mean_avg_precision
+from util import calculateBM25Feature
+from util import getDocumentRelevantKeyphrases
+from util import getDocumentNames
+from util import getAllDocumentCandidates
+from util import calculateDocumentEvaluation
 
 from multiprocessing.dummy import Pool as ThreadPool
 
 from time import gmtime, strftime
 
-
-############################ BM25 ################################
-def retrieveAverageDocLength(documents):
-    total_documents_terms = 0
-
-    for doc_term_list in documents:
-        total_documents_terms += len(doc_term_list)
-
-    return total_documents_terms / len(documents)
-
-
-def buildInvertedIndexDict(documents_list):
-    """
-    Creates a dictionary that for each term(n-gram) contains a dictionary of documents where that term occurrs and the
-    number of occurrences. e.g., {'word' : {'document1' : 4}
-
-    :param doc_list:  list of documents, each document is a list of terms(n-grams) that it containss
-    :return: dictionary
-    """
-
-    total_term_number = 0
-    inverted_index_dict = {}
-
-    for doc_index, doc_term_list in enumerate(documents_list):
-        total_term_number += len(doc_term_list)
-
-        for term in doc_term_list:
-            if term in inverted_index_dict:
-                if doc_index in inverted_index_dict[term]:
-                    inverted_index_dict[term][doc_index] = inverted_index_dict[term][doc_index] + 1
-                else:
-                    inverted_index_dict[term][doc_index] = 1
-
-            else:
-                inverted_index_dict[term] = {doc_index : 1}
-
-    return inverted_index_dict
-
-def calcCandidateIDF(inverted_index_dict, candidate, total_doc_number):
-    """
-    IDF of a given candidate
-
-    IDF = log((N - n(t) + 0.5) / (n(t) + 0.5
-    N - total number of documents in a background collection
-    n(t) - number of documents, from this background, containing the term t
-    """
-
-    n_t = len(inverted_index_dict[candidate])
-    return math.log((total_doc_number - n_t + 0.5) / (n_t + 0.5))
-
-def calcCandidateScore(inverted_index_dict, n_grammed_document, candidate, document_length, average_document_length, number_background_documents):
-    """
-    Gets  score to a given candidate  within a given document according to the BM25 term weighting heuristic
-    """
-
-    k1 = 1.2
-    b = 0.75
-
-    idf = calcCandidateIDF(inverted_index_dict, candidate, number_background_documents)
-
-    #f(t, D) - frequency for candidate t in document D
-    tf = n_grammed_document.count(candidate)
-
-    return idf * ((tf * (k1 + 1)) / (tf + k1 * (1 - b + b * (document_length / average_document_length))))
-
-def performCandidateScoring(inverted_index_dict, n_grammed_document, average_document_length, number_background_documents):
-    scores = {}
-
-    document_length = len(n_grammed_document)
-
-    for candidate in set(n_grammed_document):
-
-        if candidate not in inverted_index_dict:
-            continue
-
-        candidate_doc_score = calcCandidateScore(inverted_index_dict, n_grammed_document, candidate, document_length,
-                                                 average_document_length, number_background_documents)
-
-        #print("score('" + candidate + "') = " + str(candidate_doc_score))
-
-        if candidate not in scores:
-            scores[candidate] = candidate_doc_score
-
-    return scores
 
 ########################### PhrInf ###############################
 
@@ -180,9 +101,7 @@ def calcLM2(term, freq_dict, total_unigram_count):
 
 ##################################################################
 
-def getKeyphrasesFromFile(filePathName):
-    keyPhrases = readDocument(filePathName).splitlines()
-    return keyPhrases
+
 
 def checkKeyphrase(docName, term, training_document=False):
     #returns True if the term is a keyphrase of docName
@@ -193,46 +112,7 @@ def checkKeyphrase(docName, term, training_document=False):
         return False
 
 
-def getDocumentNames(training_document=False):
-    if (training_document == False):
-        path = os.path.join(os.path.dirname(__file__), "dataset", "documents")
-    else:
-        path = os.path.join(os.path.dirname(__file__), "training", "documents")
-    fileNames = os.listdir(path)
-    fileNames.sort()
-    return fileNames
 
-def getDocumentContent(docName, training_document=False):
-    if (training_document == False):
-        path = os.path.join(os.path.dirname(__file__), "dataset", "documents", docName)
-    else:
-        path = os.path.join(os.path.dirname(__file__), "training", "documents", docName)
-    return readDocument(path)
-
-def getDocumentRelevantKeyphrases(docName, training_document=False):
-    if(training_document == False):
-        rootPath = os.path.join(os.path.dirname(__file__), "dataset", "indexers")
-        k = []
-        for i in range(1, 7):
-            k.append(getKeyphrasesFromFile(os.path.join(rootPath, "iic" + str(i), docName[:-3] + "key")))
-        return list(set().union(k[0], k[1], k[2], k[3], k[4], k[5]))
-    else:
-        rootPath = os.path.join(os.path.dirname(__file__), "training", "keys")
-        return getKeyphrasesFromFile(os.path.join(rootPath, docName[:-3] + "key"))
-
-def getDocumentCandidates(docName, training_document=False):
-    #returns a list of list of strings (each list contains the ngrams of a sentece)
-    text = getDocumentContent(docName, training_document)
-    sentences = PunktSentenceTokenizer().tokenize(text)
-    return [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
-
-def getAllDocumentCandidates(docNames, training_documents=False):
-    #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
-    allCandidates = {}
-    for docName in docNames[:2]:
-        allCandidates[docName] = getDocumentCandidates(docName, training_documents)
-
-    return allCandidates
 
 def calculatePositionFeature(n_grammed_sentences):
     scores = {}
@@ -244,54 +124,70 @@ def calculatePositionFeature(n_grammed_sentences):
                 scores[gram] = float(prior_weight)
     return scores
 
-def calculatePRankFeature(n_grammed_sentences):
-    return pagerank(createGraph(n_grammed_sentences))
+def calculatePRankFeature(n_grams, n_grammed_sentences):
+    return pagerank(createGraph(n_grams, n_grammed_sentences))
 
-def calculateBM25Feature(FGn_grammed_sentences, BGn_grammed_docs):
-    FGngrams  = getCandidatesfromDocumentSentences(FGn_grammed_sentences)
-    BGngrams = []
-    for BGdoc in BGn_grammed_docs:
-        BGngrams.append(getCandidatesfromDocumentSentences(BGn_grammed_docs[BGdoc]))
-    number_background_documents = len(BGngrams)
-    average_document_length = retrieveAverageDocLength(BGngrams)
-    inverted_index_dict = buildInvertedIndexDict(BGngrams)
-    return performCandidateScoring(inverted_index_dict, FGngrams, average_document_length,
-                            number_background_documents)
-
-def calculatePhrInfFeature(FGn_grammed_sentences, BGn_grammed_docs):
-    FGngrams = getCandidatesfromDocumentSentences(FGn_grammed_sentences)
-    BGngrams = []
-    for BGdoc in BGn_grammed_docs:
-        BGngrams.append(getCandidatesfromDocumentSentences(BGn_grammed_docs[BGdoc]))
-    fg_dict, fg_unigram_count = buildTermCountDict([FGngrams])
-    bg_dict, bg_unigram_count = buildTermCountDict(BGngrams)
+def calculatePhrInfFeature(docName, n_grammed_docs):
+    fg_dict, fg_unigram_count = buildTermCountDict([n_grammed_docs[docName]])
+    bg_dict, bg_unigram_count = buildTermCountDict(n_grammed_docs.values())
     return calcCandidateKLDivScore(fg_dict, bg_dict, fg_unigram_count, bg_unigram_count)
 
 
 def generateTrainingData():
     docNames = getDocumentNames(True)
     print "getAllDocumentCandidates: " + strftime("%H:%M:%S", gmtime())
-    candidates = getAllDocumentCandidates(docNames, True)
+    candidates_in_sentences = getAllDocumentCandidates(docNames, True)
+    candidates = {}
+    for doc in candidates_in_sentences:
+        candidates[doc] = getCandidatesfromDocumentSentences(candidates_in_sentences[doc])
     training_data = []
     for docName in candidates:
         print "scoresPos: " + strftime("%H:%M:%S", gmtime())
-        scoresPos = calculatePositionFeature(candidates[docName])
+        scoresPos = calculatePositionFeature(candidates_in_sentences[docName])
         print "scoresBM25: " + strftime("%H:%M:%S", gmtime())
-        scoresBM25 = calculateBM25Feature(candidates[docName], candidates)
+        scoresBM25 = calculateBM25Feature(docName, candidates)
         print "scoresPhrInf: " + strftime("%H:%M:%S", gmtime())
-        scoresPhrInf = calculatePhrInfFeature(candidates[docName], candidates)
-        #scoresPRank = calculatePRankFeature(candidates[docName])
+        scoresPhrInf = calculatePhrInfFeature(docName, candidates)
+        scoresPRank = calculatePRankFeature(candidates[docName], candidates_in_sentences[docName])
         for term in scoresPos:
             #create feature vector
             features = []
             features.append(scoresPos[term])
             features.append(scoresBM25[term])
             features.append(scoresPhrInf[term])
-            #features.append(scoresPRank[term])
+            features.append(scoresPRank[term])
             #check if term is keyphrase
             bool = checkKeyphrase(docName, term, True)
             training_data.append((features, bool))
     return training_data
+
+def generateEvaluationData():
+    docNames = getDocumentNames()
+    candidates_in_sentences = getAllDocumentCandidates(docNames)
+    candidates = {}
+    for doc in candidates_in_sentences:
+        candidates[doc] = getCandidatesfromDocumentSentences(candidates_in_sentences[doc])
+    evaluation_data = {}
+    for docName in candidates:
+        evaluation_data[docName] = {}
+        print "scoresPos: " + strftime("%H:%M:%S", gmtime())
+        scoresPos = calculatePositionFeature(candidates_in_sentences[docName])
+        print "scoresBM25: " + strftime("%H:%M:%S", gmtime())
+        scoresBM25 = calculateBM25Feature(docName, candidates)
+        print "scoresPhrInf: " + strftime("%H:%M:%S", gmtime())
+        scoresPhrInf = calculatePhrInfFeature(docName, candidates)
+        scoresPRank = calculatePRankFeature(candidates[docName], candidates_in_sentences[docName])
+        for term in scoresPos:
+            #create feature vector
+            features = []
+            features.append(scoresPos[term])
+            features.append(scoresBM25[term])
+            features.append(scoresPhrInf[term])
+            features.append(scoresPRank[term])
+
+            evaluation_data[docName][term] = features
+
+    return evaluation_data
 
 def Perceptron(training_data):
     # receives a list of tuples. Each tuple is composed of a list of floats and a boolean (list, boolean)
@@ -324,49 +220,11 @@ def Perceptron(training_data):
 
     return w
 
-def generateEvaluationData():
-    docNames = getDocumentNames()
-    candidates = getAllDocumentCandidates(docNames)
-
-    evaluation_data = {}
-    for docName in candidates:
-        evaluation_data[docName] = {}
-        scoresPos = calculatePositionFeature(candidates[docName])
-        scoresBM25 = calculateBM25Feature(candidates[docName], candidates)
-        scoresPhrInf = calculatePhrInfFeature(candidates[docName], candidates)
-        #scoresPRank = calculatePRankFeature(candidates[docName])
-        for term in scoresPos:
-            #create feature vector
-            features = []
-            features.append(scoresPos[term])
-            features.append(scoresBM25[term])
-            features.append(scoresPhrInf[term])
-            #features.append(scoresPRank[term])
-
-            evaluation_data[docName][term] = features
-
-    return evaluation_data
-
-
-
-
 def calculateDocumentScores(doc, w):
     scores = {}
     for term in doc:
         scores[term] = dot(w, doc[term])
     return scores
-
-# calculates the various evaluation values for a given document
-def calculateDocumentEvaluation(docName, termsFeatures, w):
-    scores = calculateDocumentScores(termsFeatures, w)
-    retrieved = getTopCandidates(scores, 5)
-    relevant = getDocumentRelevantKeyphrases(docName)
-    values = {}
-    values["precision"] = precision(relevant, retrieved)
-    values["recall"] = recall(relevant, retrieved)
-    values["f1"] = f1(values["precision"], values["recall"])
-    values["ap"] = avg_precision(relevant, retrieved)
-    return values
 
 ##################################################################
 ## Main starts here
@@ -382,7 +240,8 @@ print "Evaluation data generated!\n"
 
 map = []
 for docName in evaluation_data:
-    values = calculateDocumentEvaluation(docName, evaluation_data[docName], weight_vector)
+    scores = calculateDocumentScores(evaluation_data[docName], weight_vector)
+    values = calculateDocumentEvaluation(docName, scores)
     print "====== " + docName + " ======"
     print "Precision: " + str(values["precision"])
     print "Recall: " + str(values["recall"])
