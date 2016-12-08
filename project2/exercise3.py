@@ -15,6 +15,10 @@ from util import recall
 from util import avg_precision
 from util import mean_avg_precision
 
+from multiprocessing.dummy import Pool as ThreadPool
+
+from time import gmtime, strftime
+
 
 ############################ BM25 ################################
 def retrieveAverageDocLength(documents):
@@ -219,24 +223,26 @@ def getDocumentRelevantKeyphrases(docName, training_document=False):
 def getDocumentCandidates(docName, training_document=False):
     #returns a list of list of strings (each list contains the ngrams of a sentece)
     text = getDocumentContent(docName, training_document)
-    sentences = PunktSentenceTokenizer().tokenize(text)  # with removed punctuation
+    sentences = PunktSentenceTokenizer().tokenize(text)
     return [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
 
 def getAllDocumentCandidates(docNames, training_documents=False):
     #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
     allCandidates = {}
-    for docName in docNames:
+    for docName in docNames[:2]:
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
 
     return allCandidates
 
 def calculatePositionFeature(n_grammed_sentences):
     scores = {}
+    number_sentences = len(n_grammed_sentences)
     for idx, sentence in enumerate(n_grammed_sentences):
-        prior_weight = len(n_grammed_sentences) - idx  # first sentences have better candidates
+        prior_weight = number_sentences - idx  # first sentences have better candidates
         for gram in sentence:
             if gram not in scores:
                 scores[gram] = float(prior_weight)
+    return scores
 
 def calculatePRankFeature(n_grammed_sentences):
     return pagerank(createGraph(n_grammed_sentences))
@@ -264,20 +270,24 @@ def calculatePhrInfFeature(FGn_grammed_sentences, BGn_grammed_docs):
 
 def generateTrainingData():
     docNames = getDocumentNames(True)
+    print "getAllDocumentCandidates: " + strftime("%H:%M:%S", gmtime())
     candidates = getAllDocumentCandidates(docNames, True)
     training_data = []
     for docName in candidates:
+        print "scoresPos: " + strftime("%H:%M:%S", gmtime())
         scoresPos = calculatePositionFeature(candidates[docName])
+        print "scoresBM25: " + strftime("%H:%M:%S", gmtime())
         scoresBM25 = calculateBM25Feature(candidates[docName], candidates)
+        print "scoresPhrInf: " + strftime("%H:%M:%S", gmtime())
         scoresPhrInf = calculatePhrInfFeature(candidates[docName], candidates)
-        scoresPRank = calculatePRankFeature(candidates[docName])
+        #scoresPRank = calculatePRankFeature(candidates[docName])
         for term in scoresPos:
             #create feature vector
             features = []
             features.append(scoresPos[term])
             features.append(scoresBM25[term])
             features.append(scoresPhrInf[term])
-            features.append(scoresPRank[term])
+            #features.append(scoresPRank[term])
             #check if term is keyphrase
             bool = checkKeyphrase(docName, term, True)
             training_data.append((features, bool))
@@ -324,14 +334,14 @@ def generateEvaluationData():
         scoresPos = calculatePositionFeature(candidates[docName])
         scoresBM25 = calculateBM25Feature(candidates[docName], candidates)
         scoresPhrInf = calculatePhrInfFeature(candidates[docName], candidates)
-        scoresPRank = calculatePRankFeature(candidates[docName])
+        #scoresPRank = calculatePRankFeature(candidates[docName])
         for term in scoresPos:
             #create feature vector
             features = []
             features.append(scoresPos[term])
             features.append(scoresBM25[term])
             features.append(scoresPhrInf[term])
-            features.append(scoresPRank[term])
+            #features.append(scoresPRank[term])
 
             evaluation_data[docName][term] = features
 
