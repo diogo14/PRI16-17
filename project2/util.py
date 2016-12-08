@@ -11,20 +11,8 @@ def readDocument(docPathName):
     text = file.read().lower()
     return text
 
-def removeStopWords(list_terms):
-    return [token for token in list_terms if token not in stopwords.words('english')]
-
-def removePunctuation(text):
-
-    if type(text) is str:
-        return text.translate(None, string.punctuation)
-    else:   #unicode
-        return text.translate(dict((ord(char), None) for char in string.punctuation))
-
 def getWordGrams(words, min=1, max=3):
-    """
-    Getting n-grams in a specified range
-    """
+    """ Getting n-grams in a specified range"""
 
     if '' in words:       #just in case
         words.remove('')
@@ -35,7 +23,7 @@ def getWordGrams(words, min=1, max=3):
     for n in range(min, max):
         for ngram in ngrams(words, n):
             for idx, word in enumerate(ngram):
-                if word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
+                if len(word) == 1 or word.isnumeric() or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
                     remove = True
                     break
 
@@ -43,8 +31,6 @@ def getWordGrams(words, min=1, max=3):
                 s.append(' '.join(ngram))
             else:
                 remove = False
-
-
     return s
 
 def getTopCandidates(scores, n):

@@ -5,8 +5,6 @@ import nltk
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 import xml.etree.ElementTree as ET
 
-
-from util import removePunctuation
 from util import getWordGrams
 from util import getOrderedCandidates
 from util import writeToFile
@@ -14,11 +12,10 @@ from util import writeToFile
 root = ET.parse(os.path.join(os.path.dirname(__file__), "resources", "Africa.xml"))
 articles = root.findall('./channel/item')
 
-data = ""
-
+data = []
 for article in articles:
-    data += article.findall('./title')[0].text.lower() + "."
-    data +=  article.findall('./description')[0].text.lower() + "."
+    data.append(unicode(article.findall('./title')[0].text.lower()))
+    data.append(unicode(article.findall('./description')[0].text.lower()))
 
 ################ Keyphrase extraction part ####################
 
@@ -48,8 +45,9 @@ def pagerank(graph):
     return scores
 
 
-sentences = map(removePunctuation, PunktSentenceTokenizer().tokenize(data))   #with removed punctuation
-n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
+sentences = []
+[sentences.append(PunktSentenceTokenizer().tokenize(d)) for d in data]
+n_grammed_sentences = [getWordGrams(nltk.word_tokenize(sentence[0]), 1, 4) for sentence in sentences]
 
 document_candidates = []
 
