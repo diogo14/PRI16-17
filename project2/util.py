@@ -6,7 +6,12 @@ from nltk.corpus import stopwords
 import networkx as nx
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 import os
+import math
+import re
 
+from multiprocessing.dummy import Pool as ThreadPool
+
+from time import gmtime, strftime
 
 def readDocument(docPathName):
     file = codecs.open(docPathName, "r", "ISO-8859-1")
@@ -25,7 +30,9 @@ def getWordGrams(words, min=1, max=3):
     for n in range(min, max):
         for ngram in ngrams(words, n):
             for idx, word in enumerate(ngram):
-                if len(word) == 1 or word.isnumeric() or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
+                has_letter = bool(re.search(r"[^\W\d_]", word, re.UNICODE))
+                # bool(re.match(r"(\w|\u2014|\d){2,}", word, re.UNICODE)) and
+                if not has_letter or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
                     remove = True
                     break
 
@@ -287,28 +294,49 @@ def getDocumentCandidates(docName, training_document=False):
     #returns a list of list of strings (each list contains the ngrams of a sentece)
     text = getDocumentContent(docName, training_document)
     sentences = PunktSentenceTokenizer().tokenize(text)
-    return [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
+    result = [getWordGrams(nltk.word_tokenize(sentence), 1, 4) for sentence in sentences]
+    return result
 
 def getAllDocumentCandidates(docNames, training_documents=False):
     #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
     allCandidates = {}
-    for docName in docNames:
+    for docName in docNames[:2]:
+        print "\n>>Starting getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
+        print "##>>Ending getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())
+
 
     return allCandidates
 
-def getWordVector(word):
-    f = open(os.path.join(os.path.dirname(__file__), "resources", "glove.6B.50d.txt"), "r")
-    vector = None
 
-    with open(os.path.join(os.path.dirname(__file__), "resources", "glove.6B.50d.txt"), "r") as file:
+# def auxiliarGetDocumentCandidates(args):
+#     return (args[0], getDocumentCandidates(*args))
+#
+# def getAllDocumentCandidates(docNames, training_documents=False):
+#     pool = ThreadPool(2)
+#     job_args = [(docName, training_documents) for docName in docNames[:2]]
+#     results = pool.map(auxiliarGetDocumentCandidates, job_args)
+#     pool.close()
+#     pool.join()
+#     allCandidates = dict(results)
+#
+#     return allCandidates
+
+
+def getWordVectors():
+    word_vectors = {}
+
+    with codecs.open(os.path.join(os.path.dirname(__file__), "resources", "glove.6B.50d.txt"), "r", "ISO-8859-1") as file:
         for line in file:
-            if line.startswith(word):
-                vector = line
-                break
+            try:
+                idx = line.find(' ')
+                str_vector = line[idx+1:].split(' ')
+                word_vectors[line[:idx]] = map(float, str_vector)
+            except:
+                pass
 
-    if vector is not None:
-        vector = map(float, vector[vector.find(' ')+1:].split(' '))
+    return word_vectors
 
-    return vector
+
+
 
