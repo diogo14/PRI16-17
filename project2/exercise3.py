@@ -10,6 +10,7 @@ from util import getDocumentRelevantKeyphrases
 from util import getDocumentNames
 from util import getAllDocumentCandidates
 from util import calculateDocumentEvaluation
+from util import printTopCandidates
 
 from time import gmtime, strftime
 
@@ -230,6 +231,7 @@ for docName in evaluation_data:
     print "Precision: " + str(values["precision"])
     print "Recall: " + str(values["recall"])
     print "F1: " + str(values["f1"]) + "\n"
+    printTopCandidates(scores, 5)
     map.append(values["ap"])
 
 print "==================="
