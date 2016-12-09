@@ -210,12 +210,15 @@ for docName in docNames[:2]:
             #print "F1: " + str(values["f1"]) + "\n"
 
             if variant_prior_weight not in mean_avg_precs:
-                mean_avg_precs[variant_prior_weight] = {variant_edge_weight : values['ap']}
+                mean_avg_precs[variant_prior_weight] = {variant_edge_weight : [values['ap']]}
+            elif variant_edge_weight not in mean_avg_precs[variant_prior_weight]:
+                mean_avg_precs[variant_prior_weight][variant_edge_weight] = [values['ap']]
             else:
-                mean_avg_precs[variant_prior_weight][variant_edge_weight] = values['ap']
+                mean_avg_precs[variant_prior_weight][variant_edge_weight].append(values['ap'])
+
 
 for prior_variant, map_dict in mean_avg_precs.iteritems():
     for weight_variant, map_value in map_dict.iteritems():
-        print "Mean Aver. Precision [" + prior_variant + "][" + weight_variant + "] : " + str(mean_avg_precision(map_value))
+        print "Mean Aver. Precision [" + str(prior_variant) + "][" + str(weight_variant) + "] : " + str(mean_avg_precision(map_value))
 
 print "End: " + strftime("%H:%M:%S", gmtime())

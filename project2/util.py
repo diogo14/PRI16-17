@@ -147,10 +147,7 @@ def avg_precision(list_r, list_a):
     return float(score) / float(len(list_r))
 
 def mean_avg_precision(ap_list):
-    total = 0
-    for i in ap_list:
-        total = total + i
-    return float(total) / float(len(ap_list))
+    return float(sum(ap_list)) / float(len(ap_list))
 
 # calculates the various evaluation values for a given document
 def calculateDocumentEvaluation(docName, scores):
