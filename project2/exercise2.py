@@ -60,8 +60,12 @@ for docName in docNames:
     # graph = createWeightedGraph(docName, candidates_in_sentences[docName], candidates)
     # print "##Created graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
 
-    for variant_prior_weight in [SENTENCE_PRIOR_WEIGHTS, BM25_PRIOR_WEIGHTS]:
+    for variant_prior_weight in [SENTENCE_PRIOR_WEIGHTS, BM25_PRIOR_WEIGHTS, SIMPLE_WEIGHTS]:
         for variant_edge_weight in [OCCURRENCE_EDGE_WEIGHTS, SIMILARITY_EDGE_WEIGHTS]:
+            if(variant_prior_weight == SIMPLE_WEIGHTS and variant_edge_weight == SIMILARITY_EDGE_WEIGHTS):
+                continue
+            elif(variant_prior_weight == SIMPLE_WEIGHTS and variant_edge_weight == OCCURRENCE_EDGE_WEIGHTS):
+                variant_edge_weight = SIMPLE_WEIGHTS
             print ">>Starting pagerank '" + docName + "' " + strftime("%H:%M:%S", gmtime())
             scores = pagerank(graphs[docName], variant_prior_weight, variant_edge_weight)
             print "##Ending pagerank '" + docName + "' " + strftime("%H:%M:%S", gmtime())
