@@ -1,5 +1,4 @@
 import networkx as nx
-from scipy import spatial
 from util import printTopCandidates
 from util import calculateDocumentEvaluation
 from util import mean_avg_precision
@@ -8,6 +7,7 @@ from util import getCandidatesfromDocumentSentences
 from util import getDocumentNames
 from util import getAllDocumentCandidates
 from util import getWordVectors
+from util import pagerank
 
 from time import gmtime, strftime
 
@@ -26,57 +26,16 @@ word_vector = getWordVectors()
 print "##Ending caching word vectors: " + strftime("%H:%M:%S", gmtime())
 
 
-
-def computeSimilarityWeight(ngram1, ngram2):
-
-    zero_vector = [0.0 for _ in range(50)]
-
-    if ngram1 in memoized_similarity_weights and ngram2 in memoized_similarity_weights[ngram1]:
-        return memoized_similarity_weights[ngram1][ngram2]
-    elif ngram2 in memoized_similarity_weights and ngram1 in memoized_similarity_weights[ngram2]:
-        return memoized_similarity_weights[ngram2][ngram1]
-
-    for word in ngram1.split(' '):
-        ngram_vectors = []
-        if word in word_vector:
-            ngram_vectors.append(word_vector[word])
-        else:
-            ngram_vectors.append(zero_vector)
-        avg_ngram1_vector = map(lambda x: sum(x) / float(len(x)), zip(*ngram_vectors))
-
-    for word in ngram2.split(' '):
-        ngram_vectors = []
-        if word in word_vector:
-            ngram_vectors.append(word_vector[word])
-        else:
-            ngram_vectors.append(zero_vector)
-        avg_ngram2_vector = map(lambda x: sum(x) / float(len(x)), zip(*ngram_vectors))
-
-    if sum(avg_ngram1_vector) == 0.0 or sum(avg_ngram2_vector) == 0.0:  #both non-zeroed vectors
-        similarity_weight = 0.0
-    else:
-        similarity_weight = 1 - spatial.distance.cosine(avg_ngram1_vector, avg_ngram2_vector) + 1
-
-    if ngram1 not in memoized_similarity_weights:
-        memoized_similarity_weights[ngram1] = {ngram2:similarity_weight}
-    else:
-        memoized_similarity_weights[ngram1][ngram2] = similarity_weight
-
-    return similarity_weight
-
-
 def auxiliarCreateWeightedGraph(args):
     return (args[0], createWeightedGraph(*args))
 
 def createWeightedGraph(docName, FGn_grammed_sentences, BGn_grammed_docs):
-    return createGraph(docName, None, FGn_grammed_sentences, BGn_grammed_docs, True)
-
-
+    return createGraph(docName, None, FGn_grammed_sentences, BGn_grammed_docs, True, memoized_similarity_weights, word_vector)
 
 
 #######################################################################################################################
 
-docNames = getDocumentNames()
+docNames = getDocumentNames()[:1]
 print "\n>>Starting getAllDocumentCandidates: " + strftime("%H:%M:%S", gmtime())
 candidates_in_sentences = getAllDocumentCandidates(docNames)
 candidates = {}
@@ -88,15 +47,15 @@ for doc in candidates_in_sentences:
 
 mean_avg_precs = {}
 
-pool = ThreadPool(2)
-job_args = [(docName, candidates_in_sentences[docName], candidates) for docName in docNames[:2]]
+pool = ThreadPool(8)
+job_args = [(docName, candidates_in_sentences[docName], candidates) for docName in docNames]
 results = pool.map(auxiliarCreateWeightedGraph, job_args)
 pool.close()
 pool.join()
 
 graphs = dict(results)
 
-for docName in docNames[:2]:
+for docName in docNames:
     # print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
     # graph = createWeightedGraph(docName, candidates_in_sentences[docName], candidates)
     # print "##Created graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())

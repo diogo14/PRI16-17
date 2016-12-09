@@ -1,6 +1,8 @@
 import nltk
 import string
 import codecs
+
+import unicodedata
 from nltk.util import ngrams
 from nltk.corpus import stopwords
 import networkx as nx
@@ -8,6 +10,7 @@ from nltk.tokenize.punkt import PunktSentenceTokenizer
 import os
 import math
 import re
+from scipy import spatial
 
 from multiprocessing.dummy import Pool as ThreadPool
 
@@ -39,7 +42,11 @@ def getWordGrams(words, min=1, max=3):
             for idx, word in enumerate(ngram):
                 has_letter = bool(re.search(r"[^\W\d_]", word, re.UNICODE))
                 # bool(re.match(r"(\w|\u2014|\d){2,}", word, re.UNICODE)) and
-                if not has_letter or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
+                ignored = ['P', 'S', 'Z', 'C']
+                invalid_begin_end = unicodedata.category(word[0])[0] in ignored or \
+                                  unicodedata.category(word[len(word)-1])[0] in ignored
+
+                if invalid_begin_end or not has_letter or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
                     remove = True
                     break
 
@@ -58,7 +65,7 @@ def getTopCandidates(scores, n):
 def printTopCandidates(scores, n):
     # top 5 candidates
     for candidate in getTopCandidates(scores, n):
-        print("" + candidate[0] + " - " + str(candidate[1]))
+        print("" + candidate[0].encode("ISO-8859-1") + " - " + str(candidate[1]))
 
 
 def getOrderedCandidates(scores):   #decreasing order
@@ -122,7 +129,7 @@ def pagerank(graph, prior_weight_type, edge_weight_type):
 
     scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
 
-    for _ in xrange(100):
+    for _ in xrange(50):
         convergences_achieved = 0
 
         for candidate in graph.nodes():
@@ -168,8 +175,45 @@ def pagerank(graph, prior_weight_type, edge_weight_type):
     return scores
 
 
+def computeSimilarityWeight(ngram1, ngram2, memoized_similarity_weights, word_vector):
 
-def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, weighted):
+    zero_vector = [0.0 for _ in range(50)]
+
+    if ngram1 in memoized_similarity_weights and ngram2 in memoized_similarity_weights[ngram1]:
+        return memoized_similarity_weights[ngram1][ngram2]
+    elif ngram2 in memoized_similarity_weights and ngram1 in memoized_similarity_weights[ngram2]:
+        return memoized_similarity_weights[ngram2][ngram1]
+
+    for word in ngram1.split(' '):
+        ngram_vectors = []
+        if word in word_vector:
+            ngram_vectors.append(word_vector[word])
+        else:
+            ngram_vectors.append(zero_vector)
+        avg_ngram1_vector = map(lambda x: sum(x) / float(len(x)), zip(*ngram_vectors))
+
+    for word in ngram2.split(' '):
+        ngram_vectors = []
+        if word in word_vector:
+            ngram_vectors.append(word_vector[word])
+        else:
+            ngram_vectors.append(zero_vector)
+        avg_ngram2_vector = map(lambda x: sum(x) / float(len(x)), zip(*ngram_vectors))
+
+    if sum(avg_ngram1_vector) == 0.0 or sum(avg_ngram2_vector) == 0.0:  #both non-zeroed vectors
+        similarity_weight = 0.0
+    else:
+        similarity_weight = 1 - spatial.distance.cosine(avg_ngram1_vector, avg_ngram2_vector) + 1
+
+    if ngram1 not in memoized_similarity_weights:
+        memoized_similarity_weights[ngram1] = {ngram2:similarity_weight}
+    else:
+        memoized_similarity_weights[ngram1][ngram2] = similarity_weight
+
+    return similarity_weight
+
+
+def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, weighted, memoized_similarity_weights, word_vector):
     #print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
     if(weighted):
         print "\n>>Starting calculateBM25: " + strftime("%H:%M:%S", gmtime())
@@ -202,7 +246,8 @@ def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, wei
                     else:
                         if not graph.has_edge(gram, another_gram):
                             #print ">>start adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
-                            graph.add_edge(gram, another_gram, occurrence_weight=1.0, similarity_weight=computeSimilarityWeight(gram, another_gram))
+                            graph.add_edge(gram, another_gram, occurrence_weight=1.0,
+                                    similarity_weight=computeSimilarityWeight(gram, another_gram, memoized_similarity_weights, word_vector))
                             #print "##end adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
                         else:
                             graph[gram][another_gram]['occurrence_weight'] = graph[gram][another_gram][
@@ -233,9 +278,8 @@ def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, wei
             similarity_sum = 0.0
             for j in graph.neighbors(candidate):
                 graph.node[candidate]['simple_weight_sum'] += 1
-                for k in graph.neighbors(j):
-                    occurrence_sum += graph[j][k]['occurrence_weight']
-                    similarity_sum += graph[j][k]['similarity_weight']
+                occurrence_sum += graph[j][candidate]['occurrence_weight']
+                similarity_sum += graph[j][candidate]['similarity_weight']
 
             graph.node[candidate]['occurrence_weight_sum'] = occurrence_sum
             graph.node[candidate]['similarity_weight_sum'] = similarity_sum
@@ -301,7 +345,8 @@ def mean_avg_precision(ap_list):
 
 # calculates the various evaluation values for a given document
 def calculateDocumentEvaluation(docName, scores):
-    retrieved = getTopCandidates(scores, 5)
+    retrieved = getTopCandidates(scores, 20)
+    retrieved = [t[0] for t in retrieved]
     relevant = getDocumentRelevantKeyphrases(docName)
     values = {}
     values["precision"] = precision(relevant, retrieved)
@@ -447,7 +492,7 @@ def getDocumentCandidates(docName, training_document=False):
 def getAllDocumentCandidates(docNames, training_documents=False):
     #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
     allCandidates = {}
-    for docName in docNames[:2]:
+    for docName in docNames:
         print "\n>>Starting getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
         print "##>>Ending getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())

@@ -2,6 +2,7 @@ import os
 import networkx as nx
 import json
 import nltk
+import urllib2
 from nltk.tokenize.punkt import PunktSentenceTokenizer
 import xml.etree.ElementTree as ET
 
@@ -9,7 +10,8 @@ from util import getWordGrams
 from util import getOrderedCandidates
 from util import writeToFile
 
-root = ET.parse(os.path.join(os.path.dirname(__file__), "resources", "Africa.xml"))
+url = 'http://www.nytimes.com/services/xml/rss/nyt/Europe.xml'
+root = ET.parse(urllib2.urlopen(url))
 articles = root.findall('./channel/item')
 
 data = []

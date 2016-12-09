@@ -10,7 +10,7 @@ from util import getCandidatesfromDocumentSentences
 from util import createGraph
 
 def createNotWeightedGraph(n_grams, n_grammed_sentences):
-    return createGraph(None, n_grams, n_grammed_sentences, None, False)
+    return createGraph(None, n_grams, n_grammed_sentences, None, False, None, None)
 #######################################################################################################################
 
 document = readDocument(os.path.join(os.path.dirname(__file__), "resources", "doc_ex1"))
