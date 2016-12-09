@@ -27,7 +27,7 @@ def createWeightedGraph(docName, FGn_grammed_sentences, BGn_grammed_docs):
 
 #######################################################################################################################
 
-docNames = getDocumentNames()[:1]
+docNames = getDocumentNames()
 candidates_in_sentences = getAllDocumentCandidates(docNames)
 candidates = {}
 
