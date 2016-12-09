@@ -37,7 +37,7 @@ candidate_scores = pagerank(createNotWeightedGraph(document_candidates, n_gramme
 
 ################ Result Output #################################
 
-ordered_candidates = getOrderedCandidates(candidate_scores)
+ordered_candidates = getOrderedCandidates(candidate_scores)[:100]
 
 #adjusting candidate weights to show in word cloud
 # candidate_score * maximum_score / MAXIMUM_WEIGHT

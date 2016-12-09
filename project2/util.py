@@ -237,7 +237,7 @@ def mean_avg_precision(ap_list):
 
 # calculates the various evaluation values for a given document
 def calculateDocumentEvaluation(docName, scores):
-    retrieved = getTopCandidates(scores, 20)
+    retrieved = getTopCandidates(scores, 5)
     retrieved = [t[0] for t in retrieved]
     relevant = getDocumentRelevantKeyphrases(docName)
     values = {}
