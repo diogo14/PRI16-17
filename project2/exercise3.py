@@ -90,8 +90,6 @@ def calcLM2(term, freq_dict, total_unigram_count):
 
 ##################################################################
 
-
-
 def checkKeyphrase(docName, term, training_document=False):
     #returns True if the term is a keyphrase of docName
     keyphrases = getDocumentRelevantKeyphrases(docName, training_document)
@@ -99,9 +97,6 @@ def checkKeyphrase(docName, term, training_document=False):
         return True
     else:
         return False
-
-
-
 
 def calculatePositionFeature(n_grammed_sentences):
     scores = {}

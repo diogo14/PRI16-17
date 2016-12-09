@@ -1,5 +1,4 @@
 import nltk
-import string
 import codecs
 
 import unicodedata
@@ -12,8 +11,6 @@ import math
 import re
 from scipy import spatial
 
-from multiprocessing.dummy import Pool as ThreadPool
-
 from time import gmtime, strftime
 
 #code readability constants
@@ -23,102 +20,8 @@ BM25_PRIOR_WEIGHTS = 2
 OCCURRENCE_EDGE_WEIGHTS = 3
 SIMILARITY_EDGE_WEIGHTS = 4
 
-def readDocument(docPathName):
-    file = codecs.open(docPathName, "r", "ISO-8859-1")
-    text = file.read().lower()
-    return text
+##########################PAGERANK########################
 
-def getWordGrams(words, min=1, max=3):
-    """ Getting n-grams in a specified range"""
-
-    if '' in words:       #just in case
-        words.remove('')
-
-    s = []
-    remove = False
-
-    for n in range(min, max):
-        for ngram in ngrams(words, n):
-            for idx, word in enumerate(ngram):
-                has_letter = bool(re.search(r"[^\W\d_]", word, re.UNICODE))
-                # bool(re.match(r"(\w|\u2014|\d){2,}", word, re.UNICODE)) and
-                ignored = ['P', 'S', 'Z', 'C']
-                invalid_begin_end = unicodedata.category(word[0])[0] in ignored or \
-                                  unicodedata.category(word[len(word)-1])[0] in ignored
-
-                if invalid_begin_end or not has_letter or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
-                    remove = True
-                    break
-
-            if remove == False:
-                s.append(' '.join(ngram))
-            else:
-                remove = False
-    return s
-
-def getTopCandidates(scores, n):
-    # reverse ordering of candidates scores
-    top_candidates = getOrderedCandidates(scores)
-    return top_candidates[:n]
-
-
-def printTopCandidates(scores, n):
-    # top 5 candidates
-    for candidate in getTopCandidates(scores, n):
-        print("" + candidate[0].encode("ISO-8859-1") + " - " + str(candidate[1]))
-
-
-def getOrderedCandidates(scores):   #decreasing order
-    # reverse ordering of candidates scores
-    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
-
-
-def writeToFile(path, content):
-    f = open(path, 'w')
-    f.write(content)
-    f.close()
-"""
-def pagerank(graph):
-    Calculates PageRank for an undirected graph
-
-    damping = 0.85
-    N = graph.number_of_nodes()  # number of candidates
-    convergence_threshold = 0.0001
-
-    scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
-
-    for _ in xrange(100):
-        convergences_achieved = 0
-        for candidate in graph.nodes():
-            linked_candidates = graph.neighbors(candidate)
-            rank = (1-damping)/N + damping * sum(scores[j] / float(len(graph.neighbors(j))) for j in linked_candidates)
-
-            if abs(scores[candidate] - rank) <= convergence_threshold:
-                convergences_achieved += 1
-
-            scores[candidate] = rank
-
-        if convergences_achieved == N:
-            break
-
-    return scores
-
-def createGraph(n_grams, n_grammed_sentences):
-    document_candidates = n_grams
-
-    graph = nx.Graph()
-    graph.add_nodes_from(document_candidates)
-
-    # adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
-    for sentence in n_grammed_sentences:
-        for gram in sentence:
-            for another_gram in sentence:
-                if another_gram == gram:
-                    continue
-                else:
-                    graph.add_edge(gram, another_gram)  # adding duplicate edges has no effect
-    return graph
-"""
 def pagerank(graph, prior_weight_type, edge_weight_type):
 
     damping = 0.85
@@ -212,6 +115,8 @@ def computeSimilarityWeight(ngram1, ngram2, memoized_similarity_weights, word_ve
 
     return similarity_weight
 
+def createNotWeightedGraph(n_grams, n_grammed_sentences):
+    return createGraph(None, n_grams, n_grammed_sentences, None, False, None, None)
 
 def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, weighted, memoized_similarity_weights, word_vector):
     #print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
@@ -292,20 +197,7 @@ def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, wei
 
     return graph
 
-
-
-
-
-
-
-
-def getCandidatesfromDocumentSentences(n_grammed_sentences):
-    document_candidates = []
-    for sentence in n_grammed_sentences:
-        for candidate in sentence:
-            if candidate not in document_candidates:
-                document_candidates.append(candidate)
-    return document_candidates
+######################Evaluation#################################
 
 def precision(list_r, list_a):
     i = set(list_r).intersection(list_a)
@@ -500,6 +392,13 @@ def getAllDocumentCandidates(docNames, training_documents=False):
 
     return allCandidates
 
+def getCandidatesfromDocumentSentences(n_grammed_sentences):
+    document_candidates = []
+    for sentence in n_grammed_sentences:
+        for candidate in sentence:
+            if candidate not in document_candidates:
+                document_candidates.append(candidate)
+    return document_candidates
 
 # def auxiliarGetDocumentCandidates(args):
 #     return (args[0], getDocumentCandidates(*args))
@@ -529,6 +428,54 @@ def getWordVectors():
 
     return word_vectors
 
+def readDocument(docPathName):
+    file = codecs.open(docPathName, "r", "ISO-8859-1")
+    text = file.read().lower()
+    return text
+
+def getWordGrams(words, min=1, max=3):
+    """ Getting n-grams in a specified range"""
+
+    if '' in words:       #just in case
+        words.remove('')
+
+    s = []
+    remove = False
+
+    for n in range(min, max):
+        for ngram in ngrams(words, n):
+            for idx, word in enumerate(ngram):
+                has_letter = bool(re.search(r"[^\W\d_]", word, re.UNICODE))
+                # bool(re.match(r"(\w|\u2014|\d){2,}", word, re.UNICODE)) and
+                ignored = ['P', 'S', 'Z', 'C']
+                invalid_begin_end = unicodedata.category(word[0])[0] in ignored or \
+                                  unicodedata.category(word[len(word)-1])[0] in ignored
+
+                if invalid_begin_end or not has_letter or word in stopwords.words('english') and not (len(ngram) == 3 and idx == 1):
+                    remove = True
+                    break
+
+            if remove == False:
+                s.append(' '.join(ngram))
+            else:
+                remove = False
+    return s
+
+def getTopCandidates(scores, n):
+    # reverse ordering of candidates scores
+    top_candidates = getOrderedCandidates(scores)
+    return top_candidates[:n]
+
+
+def printTopCandidates(scores, n):
+    # top 5 candidates
+    for candidate in getTopCandidates(scores, n):
+        print("" + candidate[0].encode("ISO-8859-1") + " - " + str(candidate[1]))
+
+
+def getOrderedCandidates(scores):   #decreasing order
+    # reverse ordering of candidates scores
+    return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
 
 
