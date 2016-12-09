@@ -13,6 +13,13 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 from time import gmtime, strftime
 
+#code readability constants
+SIMPLE_WEIGHTS = 0
+SENTENCE_PRIOR_WEIGHTS = 1
+BM25_PRIOR_WEIGHTS = 2
+OCCURRENCE_EDGE_WEIGHTS = 3
+SIMILARITY_EDGE_WEIGHTS = 4
+
 def readDocument(docPathName):
     file = codecs.open(docPathName, "r", "ISO-8859-1")
     text = file.read().lower()
@@ -63,9 +70,9 @@ def writeToFile(path, content):
     f = open(path, 'w')
     f.write(content)
     f.close()
-
+"""
 def pagerank(graph):
-    """Calculates PageRank for an undirected graph"""
+    Calculates PageRank for an undirected graph
 
     damping = 0.85
     N = graph.number_of_nodes()  # number of candidates
@@ -104,6 +111,149 @@ def createGraph(n_grams, n_grammed_sentences):
                 else:
                     graph.add_edge(gram, another_gram)  # adding duplicate edges has no effect
     return graph
+"""
+def pagerank(graph, prior_weight_type, edge_weight_type):
+
+    damping = 0.85
+    N = graph.number_of_nodes()  # number of candidates
+    convergence_threshold = 0.0001
+
+    converged_candidates = set()
+
+    scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
+
+    for _ in xrange(100):
+        convergences_achieved = 0
+
+        for candidate in graph.nodes():
+            if candidate in converged_candidates:
+                continue
+
+            if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
+                prior = graph.node[candidate]['sentence_prior_weight']
+                prior_sum = graph.graph['sentence_prior_sum']
+            elif prior_weight_type == BM25_PRIOR_WEIGHTS:
+                prior = graph.node[candidate]['bm25_prior_weight']
+                prior_sum = graph.graph['bm25_prior_sum']
+            else:
+                prior = 1.0
+                prior_sum = graph.graph['simple_prior_sum']
+
+            summatory = 0.0
+            for j in graph.neighbors(candidate):
+                if edge_weight_type == OCCURRENCE_EDGE_WEIGHTS:
+                    weight = graph[j][candidate]['occurrence_weight']
+                    weight_sum = graph.node[j]['occurrence_weight_sum']
+                elif edge_weight_type == SIMILARITY_EDGE_WEIGHTS:
+                    weight = graph[j][candidate]['similarity_weight']
+                    weight_sum = graph.node[j]['similarity_weight_sum']
+                else:
+                    weight = 1.0
+                    weight_sum = graph.node[j]['simple_weight_sum']
+
+                if weight != 0.0:
+                    summatory += scores[j] * weight / weight_sum
+
+            rank = (1 - damping) * prior / prior_sum + damping * summatory
+
+            if abs(scores[candidate] - rank) <= convergence_threshold:
+                convergences_achieved += 1
+                converged_candidates.add(candidate)
+
+            scores[candidate] = rank
+
+        if convergences_achieved == N:
+            break
+
+    return scores
+
+
+
+def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, weighted):
+    #print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
+    if(weighted):
+        print "\n>>Starting calculateBM25: " + strftime("%H:%M:%S", gmtime())
+        scoresBM25 = calculateBM25Feature(docName, BGn_grammed_docs)
+        document_candidates = BGn_grammed_docs[docName]
+        print "##Ending calculateBM25: " + strftime("%H:%M:%S", gmtime())
+
+        print "\n>>Starting adding nodes: " + strftime("%H:%M:%S", gmtime())
+        graph = nx.Graph()
+        for candidate in document_candidates:
+            graph.add_node(candidate, bm25_prior_weight=scoresBM25[candidate])
+        print "##Ending adding nodes: " + strftime("%H:%M:%S", gmtime())
+        graph.graph['simple_prior_sum'] = len(document_candidates)
+    else:
+        graph = nx.Graph()
+        graph.add_nodes_from(FGn_grams)
+        graph.graph['simple_prior_sum'] = len(FGn_grams)
+
+    if(weighted):
+        # adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
+        # adding prior weight for each candidate (based on the sentence it appears by the first time
+        for idx, sentence in enumerate(FGn_grammed_sentences):
+            prior_weight = len(FGn_grammed_sentences) - idx  # first sentences have better candidates
+            for gram in sentence:
+                if 'sentence_prior_weight' not in graph[gram]:  # set only by the first time
+                    graph.node[gram]['sentence_prior_weight'] = float(prior_weight)
+                for another_gram in sentence:
+                    if another_gram == gram:
+                        continue
+                    else:
+                        if not graph.has_edge(gram, another_gram):
+                            #print ">>start adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
+                            graph.add_edge(gram, another_gram, occurrence_weight=1.0, similarity_weight=computeSimilarityWeight(gram, another_gram))
+                            #print "##end adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
+                        else:
+                            graph[gram][another_gram]['occurrence_weight'] = graph[gram][another_gram][
+                                                                             'occurrence_weight'] + 1.0  # additional occurrence of candidates
+
+    else:
+        # adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
+        for sentence in FGn_grammed_sentences:
+            for gram in sentence:
+                for another_gram in sentence:
+                    if another_gram == gram:
+                        continue
+                    else:
+                        graph.add_edge(gram, another_gram)  # adding duplicate edges has no effect
+
+
+    print "\n>>Graph generated: " + strftime("%H:%M:%S", gmtime())
+    if(weighted):
+        print "\n>>Starting prior sum calc: " + strftime("%H:%M:%S", gmtime())
+        graph.graph['sentence_prior_sum'] = sum(graph.node[k]['sentence_prior_weight'] for k in graph.nodes())
+        graph.graph['bm25_prior_sum'] = sum(graph.node[k]['bm25_prior_weight'] for k in graph.nodes())
+        print "##Ending prior sum calc: " + strftime("%H:%M:%S", gmtime())
+
+        print "\n>>Starting weight sum calc: " + strftime("%H:%M:%S", gmtime())
+        for candidate in graph.nodes():
+            graph.node[candidate]['simple_weight_sum'] = 0
+            occurrence_sum = 0.0
+            similarity_sum = 0.0
+            for j in graph.neighbors(candidate):
+                graph.node[candidate]['simple_weight_sum'] += 1
+                for k in graph.neighbors(j):
+                    occurrence_sum += graph[j][k]['occurrence_weight']
+                    similarity_sum += graph[j][k]['similarity_weight']
+
+            graph.node[candidate]['occurrence_weight_sum'] = occurrence_sum
+            graph.node[candidate]['similarity_weight_sum'] = similarity_sum
+    else:
+        for candidate in graph.nodes():
+            graph.node[candidate]['simple_weight_sum'] = len(graph.neighbors(candidate))
+
+    print "##Ending weight sum calc: " + strftime("%H:%M:%S", gmtime())
+    #print "##Created graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
+
+    return graph
+
+
+
+
+
+
+
 
 def getCandidatesfromDocumentSentences(n_grammed_sentences):
     document_candidates = []

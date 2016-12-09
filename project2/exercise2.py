@@ -3,7 +3,7 @@ from scipy import spatial
 from util import printTopCandidates
 from util import calculateDocumentEvaluation
 from util import mean_avg_precision
-from util import calculateBM25Feature
+from util import createGraph
 from util import getCandidatesfromDocumentSentences
 from util import getDocumentNames
 from util import getAllDocumentCandidates
@@ -14,6 +14,7 @@ from time import gmtime, strftime
 from multiprocessing.dummy import Pool as ThreadPool
 
 #code readability constants
+SIMPLE_WEIGHTS = 0
 SENTENCE_PRIOR_WEIGHTS = 1
 BM25_PRIOR_WEIGHTS = 2
 OCCURRENCE_EDGE_WEIGHTS = 3
@@ -24,54 +25,7 @@ print ">>Starting caching word vectors: " + strftime("%H:%M:%S", gmtime())
 word_vector = getWordVectors()
 print "##Ending caching word vectors: " + strftime("%H:%M:%S", gmtime())
 
-def pagerank(graph, prior_weight_type, edge_weight_type):
 
-    damping = 0.85
-    N = graph.number_of_nodes()  # number of candidates
-    convergence_threshold = 0.0001
-
-    converged_candidates = set()
-
-    scores = dict.fromkeys(graph.nodes(), 1.0 / N)  #initial value
-
-    for _ in xrange(100):
-        convergences_achieved = 0
-
-        for candidate in graph.nodes():
-            if candidate in converged_candidates:
-                continue
-
-            if prior_weight_type == SENTENCE_PRIOR_WEIGHTS:
-                prior = graph.node[candidate]['sentence_prior_weight']
-                prior_sum = graph.graph['sentence_prior_sum']
-            else:
-                prior = graph.node[candidate]['bm25_prior_weight']
-                prior_sum = graph.graph['bm25_prior_sum']
-
-            summatory = 0.0
-            for j in graph.neighbors(candidate):
-                if edge_weight_type == OCCURRENCE_EDGE_WEIGHTS:
-                    weight = graph[j][candidate]['occurrence_weight']
-                    weight_sum = graph.node[j]['occurrence_weight_sum']
-                else:
-                    weight = graph[j][candidate]['similarity_weight']
-                    weight_sum = graph.node[j]['similarity_weight_sum']
-
-                if weight != 0.0:
-                    summatory += scores[j] * weight / weight_sum
-
-            rank = (1 - damping) * prior / prior_sum - damping * summatory
-
-            if abs(scores[candidate] - rank) <= convergence_threshold:
-                convergences_achieved += 1
-                converged_candidates.add(candidate)
-
-            scores[candidate] = rank
-
-        if convergences_achieved == N:
-            break
-
-    return scores
 
 def computeSimilarityWeight(ngram1, ngram2):
 
@@ -115,60 +69,11 @@ def auxiliarCreateWeightedGraph(args):
     return (args[0], createWeightedGraph(*args))
 
 def createWeightedGraph(docName, FGn_grammed_sentences, BGn_grammed_docs):
-    print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
+    return createGraph(docName, None, FGn_grammed_sentences, BGn_grammed_docs, True)
 
-    print "\n>>Starting calculateBM25: " + strftime("%H:%M:%S", gmtime())
-    scoresBM25 = calculateBM25Feature(docName, BGn_grammed_docs)
-    document_candidates = BGn_grammed_docs[docName]
-    print "##Ending calculateBM25: " + strftime("%H:%M:%S", gmtime())
 
-    print "\n>>Starting adding nodes: " + strftime("%H:%M:%S", gmtime())
-    graph = nx.Graph()
-    for candidate in document_candidates:
-        graph.add_node(candidate, bm25_prior_weight=scoresBM25[candidate])
-    print "##Ending adding nodes: " + strftime("%H:%M:%S", gmtime())
 
-    # adding edges to the undirected  unweighted graph (gram, another_gram) combinatins within the same sentence. for each sentence
-    # adding prior weight for each candidate (based on the sentence it appears by the first time
-    for idx, sentence in enumerate(FGn_grammed_sentences):
-        prior_weight = len(FGn_grammed_sentences) - idx  # first sentences have better candidates
-        for gram in sentence:
-            if 'sentence_prior_weight' not in graph[gram]:  # set only by the first time
-                graph.node[gram]['sentence_prior_weight'] = float(prior_weight)
-            for another_gram in sentence:
-                if another_gram == gram:
-                    continue
-                else:
-                    if not graph.has_edge(gram, another_gram):
-                        #print ">>start adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
-                        graph.add_edge(gram, another_gram, occurrence_weight=1.0, similarity_weight=computeSimilarityWeight(gram, another_gram))
-                        #print "##end adding edge '" + gram + " " + another_gram + ": " + strftime("%H:%M:%S", gmtime())
-                    else:
-                        graph[gram][another_gram]['occurrence_weight'] = graph[gram][another_gram][
-                                                                             'occurrence_weight'] + 1.0  # additional occurrence of candidates
-    print "\n>>Graph generated: " + strftime("%H:%M:%S", gmtime())
 
-    print "\n>>Starting prior sum calc: " + strftime("%H:%M:%S", gmtime())
-    graph.graph['sentence_prior_sum'] = sum(graph.node[k]['sentence_prior_weight'] for k in graph.nodes())
-    graph.graph['bm25_prior_sum'] = sum(graph.node[k]['bm25_prior_weight'] for k in graph.nodes())
-    print "##Ending prior sum calc: " + strftime("%H:%M:%S", gmtime())
-
-    print "\n>>Starting weight sum calc: " + strftime("%H:%M:%S", gmtime())
-    for candidate in graph.nodes():
-        occurrence_sum = 0.0
-        similarity_sum = 0.0
-        for j in graph.neighbors(candidate):
-            for k in graph.neighbors(j):
-                occurrence_sum += graph[j][k]['occurrence_weight']
-                similarity_sum += graph[j][k]['similarity_weight']
-
-        graph.node[candidate]['occurrence_weight_sum'] = occurrence_sum
-        graph.node[candidate]['similarity_weight_sum'] = similarity_sum
-
-    print "##Ending weight sum calc: " + strftime("%H:%M:%S", gmtime())
-    print "##Created graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
-
-    return graph
 #######################################################################################################################
 
 docNames = getDocumentNames()
