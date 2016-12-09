@@ -1,7 +1,7 @@
 from numpy import dot
 import math
 from util import getWordGrams
-from util import createGraph
+from util import createNotWeightedGraph
 from util import pagerank
 from util import getCandidatesfromDocumentSentences
 from util import mean_avg_precision
@@ -110,7 +110,7 @@ def calculatePositionFeature(n_grammed_sentences):
     return scores
 
 def calculatePRankFeature(n_grams, n_grammed_sentences):
-    return pagerank(createGraph(n_grams, n_grammed_sentences))
+    return pagerank(createNotWeightedGraph(n_grams, n_grammed_sentences), 0, 0)
 
 def calculatePhrInfFeature(docName, n_grammed_docs):
     fg_dict, fg_unigram_count = buildTermCountDict([n_grammed_docs[docName]])
