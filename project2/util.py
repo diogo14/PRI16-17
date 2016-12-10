@@ -1,6 +1,5 @@
 import nltk
 import codecs
-
 import unicodedata
 from nltk.util import ngrams
 from nltk.corpus import stopwords
@@ -11,7 +10,6 @@ import math
 import re
 from scipy import spatial
 
-from time import gmtime, strftime
 
 #code readability constants
 SIMPLE_WEIGHTS = 0
@@ -121,16 +119,11 @@ def createNotWeightedGraph(n_grams, n_grammed_sentences):
 def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, weighted, memoized_similarity_weights, word_vector):
     #print "\n>>Starting graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
     if(weighted):
-        print "\n>>Starting calculateBM25: " + strftime("%H:%M:%S", gmtime())
         scoresBM25 = calculateBM25Feature(docName, BGn_grammed_docs)
         document_candidates = BGn_grammed_docs[docName]
-        print "##Ending calculateBM25: " + strftime("%H:%M:%S", gmtime())
-
-        print "\n>>Starting adding nodes: " + strftime("%H:%M:%S", gmtime())
         graph = nx.Graph()
         for candidate in document_candidates:
             graph.add_node(candidate, bm25_prior_weight=scoresBM25[candidate])
-        print "##Ending adding nodes: " + strftime("%H:%M:%S", gmtime())
         graph.graph['simple_prior_sum'] = len(document_candidates)
     else:
         graph = nx.Graph()
@@ -168,15 +161,10 @@ def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, wei
                     else:
                         graph.add_edge(gram, another_gram)  # adding duplicate edges has no effect
 
-
-    print "\n>>Graph generated: " + strftime("%H:%M:%S", gmtime())
     if(weighted):
-        print "\n>>Starting prior sum calc: " + strftime("%H:%M:%S", gmtime())
         graph.graph['sentence_prior_sum'] = sum(graph.node[k]['sentence_prior_weight'] for k in graph.nodes())
         graph.graph['bm25_prior_sum'] = sum(graph.node[k]['bm25_prior_weight'] for k in graph.nodes())
-        print "##Ending prior sum calc: " + strftime("%H:%M:%S", gmtime())
 
-        print "\n>>Starting weight sum calc: " + strftime("%H:%M:%S", gmtime())
         for candidate in graph.nodes():
             graph.node[candidate]['simple_weight_sum'] = 0
             occurrence_sum = 0.0
@@ -191,9 +179,6 @@ def createGraph(docName, FGn_grams, FGn_grammed_sentences, BGn_grammed_docs, wei
     else:
         for candidate in graph.nodes():
             graph.node[candidate]['simple_weight_sum'] = len(graph.neighbors(candidate))
-
-    print "##Ending weight sum calc: " + strftime("%H:%M:%S", gmtime())
-    #print "##Created graph '" + docName + "' " + strftime("%H:%M:%S", gmtime())
 
     return graph
 
@@ -325,8 +310,6 @@ def performCandidateScoring(inverted_index_dict, n_grammed_document, average_doc
         candidate_doc_score = calcCandidateScore(inverted_index_dict, n_grammed_document, candidate, document_length,
                                                  average_document_length, number_background_documents)
 
-        #print("score('" + candidate + "') = " + str(candidate_doc_score))
-
         if candidate not in scores:
             scores[candidate] = candidate_doc_score
 
@@ -385,10 +368,7 @@ def getAllDocumentCandidates(docNames, training_documents=False):
     #returns a dictionary of docNames to lists of lists (docs - sentences - terms)
     allCandidates = {}
     for docName in docNames:
-        print "\n>>Starting getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())
         allCandidates[docName] = getDocumentCandidates(docName, training_documents)
-        print "##>>Ending getDocumentCandidates('" + docName + "')" + strftime("%H:%M:%S", gmtime())
-
 
     return allCandidates
 
@@ -399,20 +379,6 @@ def getCandidatesfromDocumentSentences(n_grammed_sentences):
             if candidate not in document_candidates:
                 document_candidates.append(candidate)
     return document_candidates
-
-# def auxiliarGetDocumentCandidates(args):
-#     return (args[0], getDocumentCandidates(*args))
-#
-# def getAllDocumentCandidates(docNames, training_documents=False):
-#     pool = ThreadPool(2)
-#     job_args = [(docName, training_documents) for docName in docNames[:2]]
-#     results = pool.map(auxiliarGetDocumentCandidates, job_args)
-#     pool.close()
-#     pool.join()
-#     allCandidates = dict(results)
-#
-#     return allCandidates
-
 
 def getWordVectors():
     word_vectors = {}
@@ -446,7 +412,6 @@ def getWordGrams(words, min=1, max=3):
         for ngram in ngrams(words, n):
             for idx, word in enumerate(ngram):
                 has_letter = bool(re.search(r"[^\W\d_]", word, re.UNICODE))
-                # bool(re.match(r"(\w|\u2014|\d){2,}", word, re.UNICODE)) and
                 ignored = ['P', 'S', 'Z', 'C']
                 invalid_begin_end = unicodedata.category(word[0])[0] in ignored or \
                                   unicodedata.category(word[len(word)-1])[0] in ignored

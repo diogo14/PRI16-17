@@ -120,18 +120,14 @@ def calculatePhrInfFeature(docName, n_grammed_docs):
 
 def generateTrainingData():
     docNames = getDocumentNames(True)
-    print "getAllDocumentCandidates: " + strftime("%H:%M:%S", gmtime())
     candidates_in_sentences = getAllDocumentCandidates(docNames, True)
     candidates = {}
     for doc in candidates_in_sentences:
         candidates[doc] = getCandidatesfromDocumentSentences(candidates_in_sentences[doc])
     training_data = []
     for docName in candidates:
-        print "scoresPos: " + strftime("%H:%M:%S", gmtime())
         scoresPos = calculatePositionFeature(candidates_in_sentences[docName])
-        print "scoresBM25: " + strftime("%H:%M:%S", gmtime())
         scoresBM25 = calculateBM25Feature(docName, candidates)
-        print "scoresPhrInf: " + strftime("%H:%M:%S", gmtime())
         scoresPhrInf = calculatePhrInfFeature(docName, candidates)
         scoresPRank = calculatePRankFeature(candidates[docName], candidates_in_sentences[docName])
         for term in scoresPos:
@@ -155,11 +151,8 @@ def generateEvaluationData():
     evaluation_data = {}
     for docName in candidates:
         evaluation_data[docName] = {}
-        print "scoresPos: " + strftime("%H:%M:%S", gmtime())
         scoresPos = calculatePositionFeature(candidates_in_sentences[docName])
-        print "scoresBM25: " + strftime("%H:%M:%S", gmtime())
         scoresBM25 = calculateBM25Feature(docName, candidates)
-        print "scoresPhrInf: " + strftime("%H:%M:%S", gmtime())
         scoresPhrInf = calculatePhrInfFeature(docName, candidates)
         scoresPRank = calculatePRankFeature(candidates[docName], candidates_in_sentences[docName])
         for term in scoresPos:
